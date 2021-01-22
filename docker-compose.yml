@@ -34,7 +34,6 @@ services:
     container_name: php
     expose:
       - 9501
-      - 9001
     volumes:
       - ${SOURCE_DIR}:/www/localhost/:rw
       - ${PHP_PHP_CONF_FILE}:/usr/local/etc/php/php.ini:ro

@@ -34,9 +34,9 @@ return [
             // 用户名
             'username'        => 'root',
             // 密码
-            'password'        => '123456',
+            'password'        => env('MYSQL_ROOT_PASSWORD'),
             // 端口
-            'hostport'        => '3306',
+            'hostport'        => env('MYSQL_HOST_PORT'),
             // 数据库连接参数
             'params'          => [],
             // 数据库编码默认采用 utf8
