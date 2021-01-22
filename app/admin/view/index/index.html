@@ -46,7 +46,7 @@
             <li class="layui-nav-item">
                 <dl class="layui-nav-child">
                     <dd lay-unselect><a data-modal="{:url('admin/index/info',['id'=>session('user.id')])}"><i class="layui-icon layui-icon-set-fill"></i> 基本资料</a></dd>
-                    <dd lay-unselect><a data-modal="{:url('admin/index/pass',['id'=>session('user.id')])}"><i class="layui-icon layui-icon-component"></i> 安全设置</a></dd>
+                    <dd lay-unselect><a data-modal="{:url('admin/index/pass',['id'=>session('user.id')])}"><i class="fa fa-key font-s14"></i> 修改密码</a></dd>
                     {if session('user.username') eq 'admin'}
                     <dd lay-unselect><a data-load="{:url('admin/api.plugs/pushRuntime')}"><i class="layui-icon layui-icon-template-1"></i> 缓存加速</a></dd>
                     <dd lay-unselect><a data-load="{:url('admin/api.plugs/clearRuntime')}"><i class="layui-icon layui-icon-fonts-clear"></i> 清理缓存</a></dd>

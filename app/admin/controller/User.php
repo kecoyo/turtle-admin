@@ -131,7 +131,8 @@ class User extends Controller
                     $this->error("账号已经存在，请使用其它账号！");
                 }
                 // 新添加的用户密码与账号相同
-                $data['password'] = md5($data['username']);
+                // $data['password'] = md5($data['username']);
+                $data['password'] = md5('123456'); // 默认密码：123456
             }
             // 账号权限绑定处理
             $data['authorize'] = arr2str($data['authorize'] ?? []);

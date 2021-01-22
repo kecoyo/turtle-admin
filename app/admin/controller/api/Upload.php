@@ -122,6 +122,7 @@ class Upload extends Controller
             $realpath = dirname($realname = $local->path($this->name, $this->safe));
             file_exists($realpath) && is_dir($realpath) || mkdir($realpath, 0755, true);
             @rename($file->getPathname(), $realname);
+            @chmod($realname, 0666 & ~umask());
             $info = $local->info($this->name, $this->safe, $file->getOriginalName());
         } else {
             $bina = file_get_contents($file->getRealPath());
