@@ -28,15 +28,15 @@ return [
             // 数据库类型
             'type'            => 'mysql',
             // 服务器地址
-            'hostname'        => 'mysql',
+            'hostname'        => env('MYSQL_HOST_NAME'),
+            // 端口
+            'hostport'        => env('MYSQL_HOST_PORT'),
             // 数据库名
             'database'        => 'turtle-admin',
             // 用户名
             'username'        => 'root',
             // 密码
             'password'        => env('MYSQL_ROOT_PASSWORD'),
-            // 端口
-            'hostport'        => env('MYSQL_HOST_PORT'),
             // 数据库连接参数
             'params'          => [],
             // 数据库编码默认采用 utf8
