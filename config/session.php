@@ -21,7 +21,7 @@ return [
     // 存储连接
     'store'  => null,
     // 过期时间
-    'expire' => 1800,
+    'expire' => 60 * 60 * 24 * 3,
     // 文件前缀
     'prefix' => '',
 ];
