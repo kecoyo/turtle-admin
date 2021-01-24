@@ -533,7 +533,7 @@ $(function () {
         return this.each(function ($in, $tpl) {
             $in = $(this), $tpl = $('<a data-file="one" class="uploadimage transition"><span class="layui-icon">&#x1006;</span></a>');
             $tpl.attr('data-type', $in.data('type') || 'png,jpg,gif').attr('data-size', $in.data('size') || 0);
-            $tpl.attr('data-field', $in.attr('name') || 'image').data('input', this);
+            $tpl.attr('data-field', $in.attr('name') || 'image').attr('data-updir', $in.data('updir') || 'image').data('input', this);
             $tpl.find('span').on('click', function (event) {
                 event.stopPropagation(), $tpl.attr('style', ''), $in.val('');
             });
@@ -547,7 +547,7 @@ $(function () {
     $.fn.uploadMultipleImage = function () {
         return this.each(function () {
             var $button = $('<a class="uploadimage"></a>'), images = this.value ? this.value.split('|') : [];
-            var $input = $(this), name = $input.attr('name') || 'umt-image', type = $input.data('type') || 'png,jpg,gif', updir = $input.data('updir') || '';
+            var $input = $(this), name = $input.attr('name') || 'umt-image', type = $input.data('type') || 'png,jpg,gif', updir = $input.data('updir');
             $button.attr('data-type', type).attr('data-field', name).attr('data-file', 'mut').attr('data-updir', updir).data('input', this);
             $input.attr('name', name).after($button), $button.uploadFile(function (src) {
                 images.push(src), $input.val(images.join('|')), showImageContainer([src]);

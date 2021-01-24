@@ -2,7 +2,7 @@
     <div class="layui-card-body padding-left-40">
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs2 text-center">
-                <input type="hidden" name="headimg" value="{$vo.headimg|default=''}">
+                <input type="hidden" name="headimg" data-updir="user_headimg" value="{$vo.headimg|default=''}">
                 <script>$('[name=headimg]').uploadOneImage()</script>
             </div>
             <div class="layui-col-xs5">
