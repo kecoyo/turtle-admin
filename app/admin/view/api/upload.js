@@ -3,10 +3,16 @@ define(['md5'], function (SparkMD5, allowMime) {
     return function (element, callable, option) {
         /*! 初始化变量 */
         option = {element: $(element), exts: [], mimes: [], files: {}, cache: {}, load: 0};
-        option.count = {total: 0, uploaded: 0}, option.size = option.element.data('size') || 0;
-        option.safe = option.element.data('safe') ? 1 : 0, option.hload = option.element.data('hide-load') ? 1 : 0;
-        option.field = option.element.data('field') || 'file', option.input = $('[name="_field_"]'.replace('_field_', option.field));
-        option.uptype = option.safe ? 'local' : option.element.attr('data-uptype') || '', option.multiple = option.element.data('multiple') > 0;
+        option.count = {total: 0, uploaded: 0};
+        option.size = option.element.data('size') || 0;
+        option.safe = option.element.data('safe') ? 1 : 0;
+        option.hload = option.element.data('hide-load') ? 1 : 0;
+        option.field = option.element.data('field') || 'file';
+        option.input = $('[name="_field_"]'.replace('_field_', option.field));
+        option.uptype = option.safe ? 'local' : option.element.attr('data-uptype') || '';
+        option.updir = option.element.data('updir') || 'other';
+        option.multiple = option.element.data('multiple') > 0;
+
         /*! 文件选择筛选 */
         $((option.element.data('type') || '').split(',')).map(function (i, ext) {
             if (allowMime[ext]) option.exts.push(ext), option.mimes.push(allowMime[ext]);
@@ -21,7 +27,7 @@ define(['md5'], function (SparkMD5, allowMime) {
                     }
                     option.load = option.hload || $.msg.loading('上传进度 <span data-upload-progress>0%</span>');
                     option.count.total++, option.files[index].index = index, option.cache[index] = option.files[index], delete option.files[index];
-                    md5file(option.cache[index]).then(function (file) {
+                    md5file(option.cache[index], option.updir).then(function (file) {
                         option.element.triggerHandler('upload.hash', file);
                         jQuery.ajax("{:url('admin/api.upload/state')}", {
                             data: {xkey: file.xkey, uptype: option.uptype, safe: option.safe, name: file.name}, method: 'post', success: function (ret) {
@@ -86,7 +92,7 @@ define(['md5'], function (SparkMD5, allowMime) {
         });
     };
 
-    function md5file(file) {
+    function md5file(file, updir) {
         var deferred = jQuery.Deferred();
         file.xext = file.name.indexOf('.') > -1 ? file.name.split('.').pop() : 'tmp';
 
@@ -105,7 +111,7 @@ define(['md5'], function (SparkMD5, allowMime) {
         return jQuery.when(loadNextChunk(file));
 
         function setFileXdata(file, xmd5) {
-            file.xmd5 = xmd5, file.xkey = file.xmd5.substr(0, 2) + '/' + file.xmd5.substr(2, 30) + '.' + file.xext;
+            file.xmd5 = xmd5, file.xkey = 'upload/' + updir + '/' + file.xmd5.substr(0, 2) + '/' + file.xmd5.substr(2, 30) + '.' + file.xext;
             return delete file.chunk_idx, delete file.chunk_size, delete file.chunk_total, file;
         }
 

@@ -115,7 +115,7 @@ class Upload extends Controller
         if (in_array($this->extension, ['php', 'sh'])) {
             return json(['uploaded' => false, 'error' => ['message' => '可执行文件禁止上传到本地服务器']]);
         }
-        [$this->safe, $this->uptype, $this->name] = [$this->getSafe(), $this->getType(), input('xkey')];
+        [$this->safe, $this->uptype, $this->name] = [$this->getSafe(), $this->getType(), input('xkey') ?: input('key')];
         if (empty($this->name)) $this->name = Storage::name($file->getPathname(), $this->extension, '', 'md5_file');
         if ($this->uptype === 'local') {
             $local = LocalStorage::instance();

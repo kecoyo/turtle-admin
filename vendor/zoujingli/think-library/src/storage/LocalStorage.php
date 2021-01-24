@@ -128,7 +128,7 @@ class LocalStorage extends Storage
      */
     public function url(string $name, bool $safe = false, ?string $attname = null): string
     {
-        return $safe ? $name : "{$this->prefix}/upload/{$this->delSuffix($name)}{$this->getSuffix($attname,$name)}";
+        return $safe ? $name : "{$this->prefix}/{$this->delSuffix($name)}{$this->getSuffix($attname,$name)}";
     }
 
     /**
@@ -140,7 +140,7 @@ class LocalStorage extends Storage
     public function path(string $name, bool $safe = false): string
     {
         $root = $this->app->getRootPath();
-        $path = $safe ? 'safefile' : 'public/upload';
+        $path = $safe ? 'safefile' : 'public';
         return strtr("{$root}{$path}/{$this->delSuffix($name)}", '\\', '/');
     }
 
@@ -155,7 +155,7 @@ class LocalStorage extends Storage
     {
         return $this->has($name, $safe) ? [
             'url' => $this->url($name, $safe, $attname),
-            'key' => "upload/{$name}", 'file' => $this->path($name, $safe),
+            'key' => $name, 'file' => $this->path($name, $safe),
         ] : [];
     }
 

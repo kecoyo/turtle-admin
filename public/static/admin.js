@@ -547,8 +547,8 @@ $(function () {
     $.fn.uploadMultipleImage = function () {
         return this.each(function () {
             var $button = $('<a class="uploadimage"></a>'), images = this.value ? this.value.split('|') : [];
-            var $input = $(this), name = $input.attr('name') || 'umt-image', type = $input.data('type') || 'png,jpg,gif';
-            $button.attr('data-type', type).attr('data-field', name).attr('data-file', 'mut').data('input', this);
+            var $input = $(this), name = $input.attr('name') || 'umt-image', type = $input.data('type') || 'png,jpg,gif', updir = $input.data('updir') || '';
+            $button.attr('data-type', type).attr('data-field', name).attr('data-file', 'mut').attr('data-updir', updir).data('input', this);
             $input.attr('name', name).after($button), $button.uploadFile(function (src) {
                 images.push(src), $input.val(images.join('|')), showImageContainer([src]);
             });
