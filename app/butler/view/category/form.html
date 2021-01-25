@@ -1,3 +1,4 @@
+{include file='category/formstyle'}
 <form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
     <div class="layui-card-body padding-left-40">
         <label class="layui-form-item relative block">
@@ -7,15 +8,18 @@
             <span class="help-block"><b>必填，</b>请填写账号分类名称，建议字符不要太长，一般2-6个汉字</span>
         </label>
 
-        <div class="layui-form-item relative block">
+        <label class="layui-form-item relative block">
             <span class="color-green font-w7">账号分类图标</span>
-            <span class="color-desc margin-left-5">Category Icon</span>
-            <label class="relative block">
-                <input name="icon" value='{$vo.icon|default=""}' placeholder="请上传商品分类图标&nbsp;&nbsp;&nbsp;&nbsp;" class="layui-input">
-                <button data-butler-icon='icon' type='button' class='layui-btn layui-btn-primary'>选择图标</button>
-            </label>
+            <span class="color-desc margin-left-5"></span>
+            <input name="icon" value='{$vo.icon|default=""}' required placeholder="请输入或选择图标" class="layui-input">
+            <div class="block butler-icon-select">
+                <span class='layui-btn layui-btn-primary butler-icon-preview'>
+                    <img src="{$vo.icon|default=''}"></img>
+                </span>
+                <button type='button' class='layui-btn layui-btn-primary butler-icon-button'>选择图标</button>
+            </div>
             <span class="help-block"><b>可选，</b>请上传商品分类图标，需要是 http 可访问的图片资源链接</span>
-        </div>
+        </label>
 
         <label class="layui-form-item relative block">
             <span class="color-green font-w7">账号分类描述</span>
@@ -29,5 +33,20 @@
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
-    <script>form.render()</script>
 </form>
+
+{block name='script'}
+<script>
+    layui.form.render();
+    require([], function () {
+        $('[name="icon"]').on('change', function () {
+            $('.butler-icon-preview').children(0).attr('src', this.value);
+        });
+
+        $('.butler-icon-button').on('click', function () {
+            var location = '/butler/api.plugs/icon', field = this.dataset.field || 'icon';
+            $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
+        });
+    });
+</script>
+{/block}

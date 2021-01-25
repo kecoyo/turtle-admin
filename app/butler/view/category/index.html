@@ -6,7 +6,7 @@
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
-<button data-action='{:url("remove")}' data-rule="id#{key}" class='layui-btn layui-btn-sm layui-btn-primary'>删除账号分类</button>
+<button data-action='{:url("remove")}' data-rule="id#{key}" data-confirm="确定要删除这些账号分类吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除账号分类</button>
 <!--{/if}-->
 {/block}
 

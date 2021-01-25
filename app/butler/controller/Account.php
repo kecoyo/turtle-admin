@@ -68,7 +68,7 @@ class Account extends Controller
      */
     public function add()
     {
-        $this->_applyFormToken();
+        $this->title = '添加账号';
         $this->_form($this->table, 'form');
     }
 
@@ -81,7 +81,7 @@ class Account extends Controller
      */
     public function edit()
     {
-        $this->_applyFormToken();
+        $this->title = '编辑账号';
         $this->_form($this->table, 'form');
     }
 
