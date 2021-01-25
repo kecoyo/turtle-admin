@@ -736,6 +736,12 @@ $(function () {
         $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
     });
 
+    /*! 注册 data-butler-icon 事件行为 */
+    $body.on('click', '[data-butler-icon]', function () {
+        var location = '/butler/api.plugs/icon', field = this.dataset.butlerIcon || this.dataset.field || 'icon';
+        $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
+    });
+
     /*! 注册 data-copy 事件行为 */
     $body.on('click', '[data-copy]', function () {
         $.copyToClipboard(this.dataset.copy);
