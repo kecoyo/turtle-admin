@@ -2,7 +2,7 @@
 
 {block name="button"}
 <!--{if auth("add")}-->
-<button data-open='{:url("add")}?category_id={$category_id}' data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
+<button data-modal='{:url("add")}?category_id={$category_id}' data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
