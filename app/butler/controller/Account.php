@@ -68,7 +68,6 @@ class Account extends Controller
      */
     public function add()
     {
-        $this->title = '添加账号';
         $this->_form($this->table, 'form');
     }
 
@@ -81,8 +80,25 @@ class Account extends Controller
      */
     public function edit()
     {
-        $this->title = '编辑账号';
         $this->_form($this->table, 'form');
+    }
+
+    /**
+     * 表单数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    protected function _form_filter(array &$data)
+    {
+        if ($this->request->isGet()) {
+            if (!isset($data['id'])) {
+                $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
+                $data['icon'] = '//cdn.kecoyo.com/upload/butler_icon/60/73c09bbc4f2b3c0bbef121c216bb96.png';
+                $data['properties'] = '[{"name":"账号","value":"kecoyo"}]';
+            }
+        }
     }
 
     /**

@@ -572,6 +572,21 @@ $(function () {
         }), this;
     };
 
+    /*! 选择账号图标 */
+    $.fn.selectAccountIcon = function () {
+      return this.each(function ($in, $tpl) {
+          $in = $(this), $tpl = $('<a class="account-icon transition"></a>');
+          $tpl.attr('data-field', $in.attr('name') || 'icon').data('input', this);
+          $tpl.on('click', function (event) {
+              var location = '/butler/api.plugs/icon', field = this.dataset.field;
+              $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
+          });
+          $in.attr('name', $tpl.attr('data-field')).after($tpl).on('change', function () {
+              if (this.value) $tpl.css('backgroundImage', 'url(' + encodeURI(this.value) + ')');
+          }).trigger('change');
+      }), this;
+    };
+
     /*! 标签输入插件 */
     $.fn.initTagInput = function () {
         return this.each(function () {
@@ -733,12 +748,6 @@ $(function () {
     /*! 注册 data-icon 事件行为 */
     $body.on('click', '[data-icon]', function () {
         var location = tapiRoot + '/api.plugs/icon', field = this.dataset.icon || this.dataset.field || 'icon';
-        $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
-    });
-
-    /*! 注册 data-butler-icon 事件行为 */
-    $body.on('click', '[data-butler-icon]', function () {
-        var location = '/butler/api.plugs/icon', field = this.dataset.butlerIcon || this.dataset.field || 'icon';
         $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
     });
 

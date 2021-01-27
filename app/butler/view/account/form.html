@@ -1,11 +1,12 @@
 {include file='account/formstyle'}
+<div style="height: 500px; overflow: auto;">
 <form id="AccountEditForm" class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
     <div class="layui-card-body padding-left-40">
 
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs2 text-center">
-                <input type="hidden" name="headimg" data-updir="user_headimg" value="{$vo.headimg|default=''}">
-                <script>$('[name=headimg]').uploadOneImage()</script>
+                <input type="hidden" name="icon" value="{$vo.icon|default=''}">
+                <script>$('[name="icon"]').selectAccountIcon();</script>
             </div>
             <div class="layui-col-xs10">
                 <label class="block relative">
@@ -31,27 +32,30 @@
                 <tr ng-repeat="prop in properties track by $index">
                     <td class="padding-0">
                         <label class="padding-0 margin-0">
-                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.name"
+                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.name" required placeholder="请输入属性名"
                                 ng-blur="rows[0].sku=setValue(rows[0].key,'sku',$event.target.value)">
                         </label>
                     </td>
                     <td class="padding-0">
                         <label class="padding-0 margin-0">
-                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.value"
+                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.value" placeholder="请输入属性值"
                                 ng-blur="rows[0].market=setValue(rows[0].key,'market',$event.target.value,'(parseFloat(_)||0).toFixed(2)')">
                         </label>
                     </td>
                     <td class="padding-0">
                         <div class="layui-table-cell laytable-cell-1-0-7 text-center">
-                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="upProp($index)"><i class="layui-icon layui-icon-up margin-0"></i></a>
-                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="downProp($index)"><i class="layui-icon layui-icon-down margin-0"></i></a>
-                            <a class="layui-btn layui-btn-danger layui-btn-xs" ng-click="deleteProp($index)"><i class="layui-icon layui-icon-delete margin-0"></i></a>
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="upProp($index)" ng-class="{false:'layui-btn-disabled'}[$index>0]"><i class="layui-icon layui-icon-up margin-0"></i></a>
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="downProp($index)" ng-class="{false:'layui-btn-disabled'}[$index<properties.length-1]"><i class="layui-icon layui-icon-down margin-0"></i></a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" ng-click="deleteProp($index)" ng-class="{false:'layui-btn-disabled'}[properties.length>1]"><i class="layui-icon layui-icon-delete margin-0"></i></a>
                         </div>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <button type='button' class='layui-btn layui-btn-primary layui-btn-sm' ng-click="addProp()"><i class="layui-icon layui-icon-addition"></i>添加属性</button>
+            <label class="layui-hide">
+                <textarea class="layui-textarea" name="properties">{{properties}}</textarea>
+            </label>
         </div>
 
         <div class="layui-form-item">
@@ -60,8 +64,8 @@
                 <thead>
                 <tr>
                     <td class="text-left">
-                        <input name="slider" type="hidden" value="{$vo.slider|default=''}">
-                        <script>$('[name="slider"]').uploadMultipleImage();</script>
+                        <input name="pictures" type="hidden" data-updir="account_pictures" value="{$vo.pictures|default=''}">
+                        <script>$('[name="pictures"]').uploadMultipleImage();</script>
                     </td>
                 </tr>
                 </thead>
@@ -78,15 +82,19 @@
     <div class="hr-line-dashed"></div>
 
     {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
-    {notempty name='vo.type_id'}<input type='hidden' value='{$vo.type_id}' name='type_id'>{/notempty}
+    {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
 
     <div class="layui-form-item text-center">
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-history-back>取消编辑</button>
     </div>
 </form>
+</div>
 
 {block name='script'}
+<label class="layui-hide">
+    <textarea id="AccountProperties">{$vo.properties|raw|default=''}</textarea>
+</label>
 <script>
     layui.form.render();
     require(['angular'], function () {
@@ -95,12 +103,7 @@
         angular.bootstrap(document.getElementById(app.name), [app.name]);
 
         function callback($rootScope) {
-            var _properties = [
-                {name: '账号', value: 'kecoyo'},
-                {name: '手机号', value: '15901097191'},
-                {name: '邮箱', value: 'kecoyo@163.com'},
-            ];
-            $rootScope.properties = angular.fromJson(angular.toJson(_properties));
+            $rootScope.properties = angular.fromJson(angular.element('#AccountProperties').val() || '[]') || {};
 
             /*! 增加属性 */
             $rootScope.addProp = function () {
@@ -108,7 +111,10 @@
             };
             /*! 删除属性 */
             $rootScope.deleteProp = function (index) {
-                $rootScope.properties.splice(index, 1);
+                var data = $rootScope.properties;
+                if(data.length > 1){
+                    data.splice(index, 1);
+                }
             };
             /*! 上移属性 */
             $rootScope.upProp = function (index) {
