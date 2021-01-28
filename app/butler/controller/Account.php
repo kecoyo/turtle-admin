@@ -52,13 +52,6 @@ class Account extends Controller
         $query->where(['is_deleted' => 0])->order('sort desc,id desc')->page(false);
     }
 
-    // public function index()
-    // {
-    //     $this->title = "账号管理";
-    //     $query = $this->_query($this->table)->like('name')->dateBetween('create_at');
-    //     $query->equal('status')->where(['is_deleted' => 0])->order('sort desc,id desc')->page(false);
-    // }
-
     /**
      * 添加账号
      * @auth true
