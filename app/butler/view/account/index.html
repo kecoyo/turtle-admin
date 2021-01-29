@@ -1,6 +1,10 @@
 {extend name="../../admin/view/main"}
 
 {block name="button"}
+<!--{if auth("move")}-->
+<button data-modal='{:url("move")}?category_id={$category_id}' data-rule="id#{key}" data-title="移动账号" class='layui-btn layui-btn-sm layui-btn-primary'>移动账号</button>
+<!--{/if}-->
+
 <!--{if auth("add")}-->
 <button data-modal='{:url("add")}?category_id={$category_id}' data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
 <!--{/if}-->
