@@ -23,7 +23,7 @@ class Plugs extends Controller
         // 分类数据
         $this->clist = $this->app->db->name('ButlerIconType')
             ->where(['is_deleted' => 0, 'status' => 1])
-            ->order('sort desc,id desc')
+            ->order('sort asc,id desc')
             ->column('id,name', 'id');
 
         // 分类数据统计
@@ -46,7 +46,7 @@ class Plugs extends Controller
         // 图标列表查询
         $this->list = $this->app->db->name('ButlerIcon')
             ->where(['is_deleted' => 0, 'status' => 1, 'type_id' => $this->type_id])
-            ->order('sort desc,id desc')
+            ->order('sort asc,id desc')
             ->select();
 
         $this->fetch(realpath(__DIR__.'/../../view/api/icon.html'));
