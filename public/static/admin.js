@@ -573,9 +573,9 @@ $(function () {
     };
 
     /*! 选择账号图标 */
-    $.fn.selectAccountIcon = function () {
+    $.fn.selectButlerIcon = function () {
       return this.each(function ($in, $tpl) {
-          $in = $(this), $tpl = $('<a class="account-icon transition"></a>');
+          $in = $(this), $tpl = $('<a class="butler-icon transition"></a>');
           $tpl.attr('data-field', $in.attr('name') || 'icon').data('input', this);
           $tpl.on('click', function (event) {
               var location = '/butler/api.plugs/icon', field = this.dataset.field;
