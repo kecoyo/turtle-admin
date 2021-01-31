@@ -31,9 +31,9 @@ class Account extends Controller
         $this->title = '账号管理';
 
         // 分类列表
-        $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->column('id,name', 'id');
+        $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0])->order('sort asc,id desc')->column('id,name', 'id');
         // 统计分类账号个数
-        $this->app->db->name($this->table)->fieldRaw('category_id,count(1) total')->where(['is_deleted' => 0, 'status' => 1])->group('category_id')->select()->map(function ($vo) {
+        $this->app->db->name($this->table)->fieldRaw('category_id,count(1) total')->where(['is_deleted' => 0])->group('category_id')->select()->map(function ($vo) {
             if (isset($this->clist[$vo['category_id']])) {
                 $this->clist[$vo['category_id']]['total'] = $vo['total'];
             }
@@ -43,13 +43,8 @@ class Account extends Controller
         $first = current($this->clist);
         $this->category_id = input('category_id', $first ? $first['id'] : '');
 
-        // 账号列表查询
-        $query = $this->app->db->name($this->table);
-
-        // 条件：列表选项卡
-        if (is_numeric($this->category_id)) $query->where(['category_id' => $this->category_id]);
-
-        $this->list = $query->where(['is_deleted' => 0])->order('sort desc,id desc')->select()->toArray();
+        // 账号列表
+        $this->list = $this->app->db->name($this->table)->where(['is_deleted' => 0, 'category_id' => $this->category_id])->order('sort asc,id desc')->select()->toArray();
 
         foreach ($this->list as &$vo) {
             // 是否有图片
@@ -106,7 +101,7 @@ class Account extends Controller
     }
 
     /**
-     * 移动账号
+     * 修改账号分类
      * @auth true
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -118,13 +113,13 @@ class Account extends Controller
     }
 
     /**
-     * 快递表单处理
-     * @param array $vo
+     * 表单数据处理
+     * @param array $data
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    protected function _move_form_filter(array &$vo)
+    protected function _move_form_filter(array &$data)
     {
         if ($this->request->isPost()) {
             $to_category_id = input('to_category_id', '0');
@@ -144,7 +139,7 @@ class Account extends Controller
                 $this->error(lang('think_library_form_error'));
             }
         } else {
-            $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->select()->toArray();
+            $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort asc,id desc')->select()->toArray();
             $this->category_id = input('category_id', '0');
         }
     }
@@ -170,5 +165,40 @@ class Account extends Controller
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
+    }
+
+    /**
+     * 调整账号顺序
+     * @auth true
+     * @throws \think\db\exception\DbException
+     */
+    public function sort()
+    {
+        $category_id = intval($this->app->request->post('category_id', 0));
+        $id = intval($this->app->request->post('id', 0));
+        $sort = intval($this->app->request->post('sort', 0));
+
+        if (!$category_id || !$id || !$sort) {
+            $this->error(lang('think_library_sort_error'));
+        }
+
+        // 账号列表
+        $list = $this->app->db->name($this->table)->where(['is_deleted' => 0, 'category_id' => $category_id])->order('sort asc,id desc')->select()->toArray();
+
+        // 查找原位置
+        $index = array_search($id, array_column($list, 'id'));
+
+        // 数组排序
+        array_splice($list, $sort - 1, 0, array_splice($list, $index, 1));
+
+        // 修改有变化排序号
+        foreach ($list as $key => $vo) {
+            $new_sort = $key + 1;
+            if ($new_sort !== $vo['sort']) {
+                $this->app->db->name($this->table)->where(['id' => $vo['id']])->update(['sort' => $new_sort]);
+            }
+        }
+
+        $this->success(lang('think_library_sort_success'));
     }
 }

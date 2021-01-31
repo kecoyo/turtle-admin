@@ -31,7 +31,7 @@ class Icon extends Controller
         $this->title = '图标管理';
         // 分类数据统计
 
-        $this->clist = $this->app->db->name('ButlerIconType')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->column('id,name', 'id');
+        $this->clist = $this->app->db->name('ButlerIconType')->where(['is_deleted' => 0])->order('sort asc,id desc')->column('id,name', 'id');
 
         $this->app->db->name($this->table)->fieldRaw('type_id,count(1) total')->where(['is_deleted' => 0, 'status' => 1])->group('type_id')->select()->map(function ($vo) {
             if (isset($this->clist[$vo['type_id']])) {
@@ -51,7 +51,7 @@ class Icon extends Controller
         // 列表选项卡
         if (is_numeric($this->type_id)) $query->where(['type_id' => $this->type_id]);
 
-        $query->where(['is_deleted' => 0])->order('sort desc,id desc')->page(false);
+        $query->where(['is_deleted' => 0])->order('sort asc,id desc')->page(false);
     }
 
     /**

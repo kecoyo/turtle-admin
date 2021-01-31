@@ -744,6 +744,22 @@ $(function () {
         }) : $.form.load(action, data, method, that.callback, load, tips, time);
     });
 
+    /*! 表单元素失焦时提交 */
+    $body.on('blur', '[data-action-sort]', function () {
+        var data = {}, that = this, $this = $(this), action = this.dataset.actionSort;
+        var time = this.dataset.time, loading = this.dataset.loading || false, load = loading !== 'false';
+        var tips = typeof loading === 'string' ? loading : undefined, method = this.dataset.method || 'post';
+        var attrs = (this.dataset.value || '').replace('{value}', $this.val()).split(';');
+        for (var i in attrs) {
+            if (attrs[i].length < 2) return $.msg.tips('异常的数据操作规则，请修改规则！');
+            data[attrs[i].split('#')[0]] = attrs[i].split('#')[1];
+        }
+        data['_token_'] = this.dataset.token || this.dataset.csrf || '--';
+        this.dataset.confirm ? $.msg.confirm(this.dataset.confirm, function () {
+            $.form.load(action, data, method, false, load, tips, time);
+        }) : $.form.load(action, data, method, false, load, tips, time);
+    });
+
     /*! 表单元素失去焦点时数字 */
     $body.on('blur', '[data-blur-number]', function () {
         var fiexd = parseInt(this.dataset.blurNumber || 0);
