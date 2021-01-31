@@ -30,26 +30,37 @@ class Account extends Controller
     {
         $this->title = '账号管理';
 
-        // 分类数据统计
+        // 分类列表
         $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->column('id,name', 'id');
-
+        // 统计分类账号个数
         $this->app->db->name($this->table)->fieldRaw('category_id,count(1) total')->where(['is_deleted' => 0, 'status' => 1])->group('category_id')->select()->map(function ($vo) {
             if (isset($this->clist[$vo['category_id']])) {
                 $this->clist[$vo['category_id']]['total'] = $vo['total'];
             }
         });
 
+        // 默认选中第一个分类
         $first = current($this->clist);
-
         $this->category_id = input('category_id', $first ? $first['id'] : '');
 
         // 账号列表查询
-        $query = $this->_query($this->table);
+        $query = $this->app->db->name($this->table);
 
-        // 列表选项卡
+        // 条件：列表选项卡
         if (is_numeric($this->category_id)) $query->where(['category_id' => $this->category_id]);
 
-        $query->where(['is_deleted' => 0])->order('sort desc,id desc')->page(false);
+        $this->list = $query->where(['is_deleted' => 0])->order('sort desc,id desc')->select()->toArray();
+
+        foreach ($this->list as &$vo) {
+            // 是否有图片
+            $pictures = str2arr($vo['pictures'] ?? '', '|');
+            $vo['picture_num'] = count($pictures);
+            // 显示第一个属性
+            $properties = json_decode($vo['properties'] ?? '[]', true);
+            $vo['first_property'] = current($properties);
+        }
+
+        $this->fetch();
     }
 
     /**
@@ -77,6 +88,24 @@ class Account extends Controller
     }
 
     /**
+     * 表单数据处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    protected function _form_filter(array &$data)
+    {
+        if ($this->request->isGet()) {
+            if (!isset($data['id'])) {
+                $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
+                $data['icon'] = '//cdn.kecoyo.com/upload/butler_icon/60/73c09bbc4f2b3c0bbef121c216bb96.png';
+                $data['properties'] = '[{"name":"账号","value":"kecoyo"}]';
+            }
+        }
+    }
+
+    /**
      * 移动账号
      * @auth true
      * @throws \think\db\exception\DataNotFoundException
@@ -89,46 +118,34 @@ class Account extends Controller
     }
 
     /**
-     * 表单数据处理
-     * @param array $data
+     * 快递表单处理
+     * @param array $vo
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    protected function _form_filter(array &$data)
+    protected function _move_form_filter(array &$vo)
     {
-        if ($this->request->action() === 'move') {
-            if ($this->request->isGet()) {
-                $this->category_id = input('category_id', '0');
-                $this->account_ids = input('id', '');
-                $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->select()->toArray();
+        if ($this->request->isPost()) {
+            $to_category_id = input('to_category_id', '0');
+            $ids = str2arr(input('id', ''));
+
+            if (!$to_category_id) {
+                $this->error('请选择目标分类！');
+            }
+
+            $result = $this->app->db->name('ButlerAccount')->where('id', 'in', $ids)->update([
+                'category_id'  => $to_category_id,
+            ]);
+
+            if ($result !== false) {
+                $this->success(lang('think_library_form_success'));
             } else {
-                $category_id = input('category_id', '0');
-                $account_ids_str = input('account_ids', '0');
-
-                // 图标保存
-                $account_ids = explode(',', $account_ids_str);
-                $result = true;
-
-                $result = $this->app->db->name('ButlerAccount')->where('id', 'in', $account_ids)->update([
-                    'category_id'  => $category_id,
-                ]);
-
-                if ($result !== false) {
-                    $this->success(lang('think_library_form_success'), 'javascript:history.back()');
-                } else {
-                    $this->error(lang('think_library_form_error'));
-                }
-                return false;
+                $this->error(lang('think_library_form_error'));
             }
         } else {
-            if ($this->request->isGet()) {
-                if (!isset($data['id'])) {
-                    $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
-                    $data['icon'] = '//cdn.kecoyo.com/upload/butler_icon/60/73c09bbc4f2b3c0bbef121c216bb96.png';
-                    $data['properties'] = '[{"name":"账号","value":"kecoyo"}]';
-                }
-            }
+            $this->clist = $this->app->db->name('ButlerCategory')->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->select()->toArray();
+            $this->category_id = input('category_id', '0');
         }
     }
 

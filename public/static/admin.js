@@ -656,25 +656,22 @@ $(function () {
     /*! 注册 data-modal 事件行为 */
     $body.on('click', '[data-modal]', function () {
         var area = this.dataset.area || this.dataset.width || '800px';
-
-        var data = {};
-        var rule = this.dataset.value || (function (elem, rule, ids) {
-            $(elem.dataset.target || 'input[type=checkbox].list-check-box').map(function () {
-                (this.checked) && ids.push(this.value);
-            });
-            return ids.length > 0 ? rule.replace('{key}', ids.join(',')) : '';
-        })(this, this.dataset.rule || '', []) || '';
-        if (rule.length < 1) return $.msg.tips('请选择需要更改的数据！');
-        rule.split(';').forEach(function (rule) {
-            if (rule.length < 2) return $.msg.tips('异常的数据操作规则，请修改规则！');
-            data[rule.split('#')[0]] = rule.split('#')[1];
-        });
-
         var url = this.dataset.modal;
-        var param = $.param(data);
+        var data = {};
 
-        if(param){
-          url += (url.includes('?') ? '&' : '?') + param;
+        if(this.dataset.rule) {
+            var rule = (function (elem, rule, ids) {
+                $(elem.dataset.target || 'input[type=checkbox].list-check-box').map(function () {
+                    (this.checked) && ids.push(this.value);
+                });
+                return ids.length > 0 ? rule.replace('{key}', ids.join(',')) : '';
+            })(this, this.dataset.rule || '', []) || '';
+            if (rule.length < 1) return $.msg.tips('请选择需要更改的数据！');
+            rule.split(';').forEach(function (rule) {
+                if (rule.length < 2) return $.msg.tips('异常的数据操作规则，请修改规则！');
+                data[rule.split('#')[0]] = rule.split('#')[1];
+            });
+            url += (url.includes('?') ? '&' : '?') + $.param(data);
         }
 
         return $.form.modal(url, 'open_type=modal', this.dataset.title || this.innerText || '编辑', undefined, undefined, undefined, area);

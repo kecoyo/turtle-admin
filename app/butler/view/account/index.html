@@ -40,7 +40,8 @@
                 <th class="text-left nowrap">账号ID</th>
                 <th class="text-left nowrap">账号图标</th>
                 <th class="text-left nowrap">账号名称</th>
-                <th class="text-left nowrap">账号备注</th>
+                <th class="text-left nowrap">主要属性</th>
+                <th class="text-left nowrap">图片数量</th>
                 <th class="text-left nowrap">账号状态</th>
                 <th class="text-left nowrap">创建时间</th>
                 <th class="text-left nowrap"></th>
@@ -59,7 +60,12 @@
                 <td class="text-left nowrap">{$vo.id}</td>
                 <td class="text-left nowrap"><div class="headimg" data-tips-image data-lazy-src="{$vo.icon|default=''}"></div></td>
                 <td class="text-left nowrap">{$vo.name|default=''}</td>
-                <td class="text-left nowrap">{$vo.remark|default=''}</td>
+                <td class="text-left nowrap">
+                    {notempty name='vo.first_property'}
+                    {$vo.first_property['name']}: {$vo.first_property['value'] ?: '-'}
+                    {/notempty}
+                </td>
+                <td class="text-left nowrap text-center">{$vo.picture_num}</td>
                 <td class="text-left nowrap">{if $vo.status eq 0}<span class="color-red">已禁用</span>{elseif $vo.status eq 1}<span class="color-green">已激活</span>{/if}</td>
                 <td class="text-left nowrap">{$vo.create_at|format_datetime}</td>
                 <td class='text-left nowrap'>

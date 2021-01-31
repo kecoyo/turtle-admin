@@ -1,5 +1,5 @@
 {include file='account/movestyle'}
-<div class="account-move">
+<div id="account-move">
 <form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
     <div class="think-box-shadow table-block">
         <table class="layui-table" lay-skin="line">
@@ -21,9 +21,9 @@
                 <td class='list-table-check-td think-checkbox'>
                     <label>
                         {if isset($category_id) and $category_id eq $vo.id}
-                        <input class="list-check-box" value='{$vo.id}' type='radio' name="category_id" checked>
+                        <input class="list-check-box" value='{$vo.id}' type='radio' name="to_category_id" checked>
                         {else}
-                        <input class="list-check-box" value='{$vo.id}' type='radio' name="category_id">
+                        <input class="list-check-box" value='{$vo.id}' type='radio' name="to_category_id">
                         {/if}
                     </label>
                 </td>
@@ -36,8 +36,6 @@
             {/foreach}
             </tbody>
         </table>
-
-        <input type='hidden' value='{$account_ids}' name='account_ids'>
 
         <div class="hr-line-dashed"></div>
 
