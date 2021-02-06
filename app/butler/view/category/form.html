@@ -37,15 +37,5 @@
 {block name='script'}
 <script>
     layui.form.render();
-    require([], function () {
-        $('[name="icon"]').on('change', function () {
-            $('.butler-icon-preview').children(0).attr('src', this.value);
-        });
-
-        $('.butler-icon-button').on('click', function () {
-            var location = '/butler/api.plugs/icon', field = this.dataset.field || 'icon';
-            $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
-        });
-    });
 </script>
 {/block}
