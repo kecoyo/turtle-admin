@@ -32,11 +32,11 @@ return [
             // 端口
             'hostport'        => env('MYSQL_HOST_PORT'),
             // 数据库名
-            'database'        => 'turtle-admin',
+            'database'        => env('MYSQL_DATABASE'),
             // 用户名
-            'username'        => 'root',
+            'username'        => env('MYSQL_USERNAME'),
             // 密码
-            'password'        => env('MYSQL_ROOT_PASSWORD'),
+            'password'        => env('MYSQL_PASSWORD'),
             // 数据库连接参数
             'params'          => [],
             // 数据库编码默认采用 utf8

@@ -11,7 +11,7 @@
       "hostname": "host.docker.internal",
       "port": 9001,
       "pathMappings": {
-        "/www/localhost": "${workspaceRoot}"
+        "/www/turtle-admin": "${workspaceRoot}"
       },
     },
     {
