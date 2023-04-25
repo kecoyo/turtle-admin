@@ -1,0 +1,43 @@
+{extend name="../../admin/view/main"}
+
+{block name='content'}
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-40">
+
+        <div class="layui-form-item relative block">
+            <span class="color-green font-w7 label-required-prev">上传图标</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td class="text-left">
+                        <input name="urls" type="hidden" data-updir="butler_icon" value="{$vo.urls|default=''}">
+                        <script>$('[name="urls"]').uploadMultipleImage();</script>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <input type="hidden" name="type_id" value="{$vo.type_id}">
+
+        <div class="hr-line-dashed"></div>
+
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type='submit'>保存数据</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-history-back>取消编辑</button>
+        </div>
+
+    </div>
+
+</form>
+{/block}
+
+{block name='script'}
+<script>
+    (function () {
+
+        layui.form.render();
+
+    })();
+</script>
+{/block}

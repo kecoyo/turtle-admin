@@ -1,0 +1,141 @@
+{include file='account/formstyle'}
+<div style="height: 500px; overflow: auto;">
+<form id="AccountEditForm" class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs2 text-center">
+                <input type="hidden" name="icon" value="{$vo.icon|default=''}">
+                <script>$('[name="icon"]').selectButlerIcon();</script>
+            </div>
+            <div class="layui-col-xs10">
+                <label class="block relative">
+                    <span class="color-green font-w7">账号名称</span>
+                    <span class="color-desc margin-left-5"></span>
+                    <input name="name" value='{$vo.name|default=""}' required placeholder="请输入账号名称" class="layui-input">
+                    <span class="help-block"><b>必填，</b>请填写账号名称，建议字符不要太长，一般2-10个汉字</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <span class="color-green font-w7">账号属性</span>
+            <table class="layui-table margin-top-10" id="tableProperty">
+                <thead>
+                <tr>
+                    <th width="25%" class="text-center nowrap">属性名</th>
+                    <th width="55%" class="text-center nowrap">属性值</th>
+                    <th width="20%" class="text-center nowrap">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="prop in properties track by $index">
+                    <td class="padding-0">
+                        <label class="padding-0 margin-0">
+                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.name" required placeholder="请输入属性名"
+                                ng-blur="rows[0].sku=setValue(rows[0].key,'sku',$event.target.value)">
+                        </label>
+                    </td>
+                    <td class="padding-0">
+                        <label class="padding-0 margin-0">
+                            <input class="layui-input border-0 padding-left-10 text-left" ng-model="prop.value" placeholder="请输入属性值"
+                                ng-blur="rows[0].market=setValue(rows[0].key,'market',$event.target.value,'(parseFloat(_)||0).toFixed(2)')">
+                        </label>
+                    </td>
+                    <td class="padding-0">
+                        <div class="layui-table-cell laytable-cell-1-0-7 text-center">
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="upProp($index)" ng-class="{false:'layui-btn-disabled'}[$index>0]"><i class="layui-icon layui-icon-up margin-0"></i></a>
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" ng-click="downProp($index)" ng-class="{false:'layui-btn-disabled'}[$index<properties.length-1]"><i class="layui-icon layui-icon-down margin-0"></i></a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" ng-click="deleteProp($index)" ng-class="{false:'layui-btn-disabled'}[properties.length>1]"><i class="layui-icon layui-icon-delete margin-0"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button type='button' class='layui-btn layui-btn-primary layui-btn-sm' ng-click="addProp()"><i class="layui-icon layui-icon-addition"></i>添加属性</button>
+            <label class="layui-hide">
+                <textarea class="layui-textarea" name="properties">{{properties}}</textarea>
+            </label>
+        </div>
+
+        <div class="layui-form-item">
+            <span class="color-green font-w7">账号图片</span>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <td class="text-left">
+                        <input name="pictures" type="hidden" data-updir="account_picture" value="{$vo.pictures|default=''}">
+                        <script>$('[name="pictures"]').uploadMultipleImage();</script>
+                    </td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+        <label class="layui-form-item relative block">
+            <span class="color-green font-w7">账号描述</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-textarea" name="remark" placeholder="请输入分类描述">{$vo.remark|default=''}</textarea>
+        </label>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+    {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+    </div>
+</form>
+</div>
+
+{block name='script'}
+<label class="layui-hide">
+    <textarea id="AccountProperties">{$vo.properties|raw|default=''}</textarea>
+</label>
+<script>
+    layui.form.render();
+    require(['angular'], function () {
+
+        var app = angular.module("AccountEditForm", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback($rootScope) {
+            $rootScope.properties = angular.fromJson(angular.element('#AccountProperties').val() || '[]') || {};
+
+            /*! 增加属性 */
+            $rootScope.addProp = function () {
+                $rootScope.properties.push({name: '', value: ''});
+            };
+            /*! 删除属性 */
+            $rootScope.deleteProp = function (index) {
+                var data = $rootScope.properties;
+                if(data.length > 1){
+                    data.splice(index, 1);
+                }
+            };
+            /*! 上移属性 */
+            $rootScope.upProp = function (index) {
+                var data = $rootScope.properties;
+                if(index === 0) return;
+
+                var tmp = data[index];
+                data[index] = data[index - 1];
+                data[index - 1] = tmp;
+            };
+            /*! 下移属性 */
+            $rootScope.downProp = function (index) {
+                var data = $rootScope.properties;
+                if(index === data.length - 1) return;
+
+                var tmp = data[index];
+                data[index] = data[index + 1];
+                data[index + 1] = tmp;
+            };
+        }
+    });
+</script>
+{/block}
+

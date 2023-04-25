@@ -1,0 +1,41 @@
+{include file='category/formstyle'}
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs2 text-center">
+                <input type="hidden" name="icon" value="{$vo.icon|default=''}">
+                <script>$('[name="icon"]').selectButlerIcon();</script>
+            </div>
+            <div class="layui-col-xs10">
+                <label class="block relative">
+                    <span class="color-green font-w7">账号分类名称</span>
+                    <span class="color-desc margin-left-5"></span>
+                    <input name="name" value='{$vo.name|default=""}' required placeholder="请输入账号名称" class="layui-input">
+                    <span class="help-block"><b>必填，</b>请填写账号分类名称，建议字符不要太长，一般2-6个汉字</span>
+                </label>
+            </div>
+        </div>
+
+        <label class="layui-form-item relative block">
+            <span class="color-green font-w7">账号分类描述</span>
+            <span class="color-desc margin-left-5"></span>
+            <textarea class="layui-textarea" name="remark" placeholder="请输入分类描述">{$vo.remark|default=''}</textarea>
+        </label>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+    </div>
+</form>
+
+{block name='script'}
+<script>
+    layui.form.render();
+</script>
+{/block}

@@ -1,0 +1,48 @@
+{include file='account/movestyle'}
+<div id="account-move">
+<form class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+    <div class="think-box-shadow table-block">
+        <table class="layui-table" lay-skin="line">
+            {notempty name='clist'}
+            <thead>
+            <tr>
+                <th class='list-table-check-td think-checkbox'></th>
+                <th class="text-left nowrap">分类ID</th>
+                <th class="text-left nowrap">分类图标</th>
+                <th class="text-left nowrap">分类名称</th>
+                <th class="text-left nowrap">分类备注</th>
+                <th class="text-left nowrap">创建时间</th>
+            </tr>
+            </thead>
+            {/notempty}
+            <tbody>
+            {foreach $clist as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td think-checkbox'>
+                    <label>
+                        {if isset($category_id) and $category_id eq $vo.id}
+                        <input class="list-check-box" value='{$vo.id}' type='radio' name="to_category_id" checked>
+                        {else}
+                        <input class="list-check-box" value='{$vo.id}' type='radio' name="to_category_id">
+                        {/if}
+                    </label>
+                </td>
+                <td class="text-left nowrap">{$vo.id}</td>
+                <td class="text-left nowrap"><div class="headimg" data-tips-image data-lazy-src="{$vo.icon|default=''}"></div></td>
+                <td class="text-left nowrap">{$vo.name|default=''}</td>
+                <td class="text-left nowrap">{$vo.remark|default=''}</td>
+                <td class="text-left nowrap">{$vo.create_at|format_datetime}</td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+
+        <div class="hr-line-dashed"></div>
+
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type='submit'>保存数据</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+        </div>
+    </div>
+</form>
+</div>
