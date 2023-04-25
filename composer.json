@@ -1,0 +1,38 @@
+{
+  "type": "project",
+  "name": "kecoyo/turtle-admin",
+  "license": "MIT",
+  "homepage": "https://kecoyo.com",
+  "description": "Application Development Framework",
+  "keywords": [
+    "ThinkAdmin",
+    "ThinkLibrary"
+  ],
+  "authors": [
+    {
+      "name": "kecoyo",
+      "email": "kecoyo@163.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ext-json": "*",
+    "zoujingli/think-library": "^6.0",
+    "zoujingli/think-plugs-admin": "^1.0",
+    "zoujingli/think-plugs-wechat": "^1.0"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "extend"
+    },
+    "psr-4": {
+      "app\\": "app"
+    }
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "zoujingli/think-install": true
+    }
+  }
+}
