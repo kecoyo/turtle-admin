@@ -3,7 +3,6 @@
 .svn
 .idea
 .fleet
-.vscode
 .DS_Store
 
 /vendor
