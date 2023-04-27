@@ -2,6 +2,8 @@
 
 namespace app\butler\controller;
 
+use app\butler\model\ButlerAccount;
+use app\butler\model\ButlerCategory;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 
@@ -28,6 +30,7 @@ class Account extends Controller
      */
     public function index()
     {
+        /*
         $this->title = '账号管理';
 
         // 分类列表
@@ -56,6 +59,33 @@ class Account extends Controller
         }
 
         $this->fetch();
+        */
+
+        // 账号类目分组
+        [$ts, $ls] = [[], ButlerCategory::items()];
+        foreach ($ls as $k => $v) $ts["t{$v['id']}"] = ['id' => $v['id'], 'name' => $v['name'], 'count' => 0,];
+        // 等级分组统计
+        foreach (ButlerAccount::mk()->field('category_id,count(1) count')->group('category_id')->cursor() as $v) {
+            [$name, $count] = ["t{$v['category_id']}", $v['count']];
+            if (isset($ts[$name])) {
+                $ts[$name]['count'] += $count;
+            }
+        }
+        $this->total = $ts;
+
+        // 设置页面标题
+        $this->title = '账号管理';
+
+        // 创建查询对象
+        $query = ButlerAccount::mQuery();
+
+        // 数据筛选选项
+        $this->type = ltrim(input('type', 'ta'), 't');
+        if (is_numeric($this->type)) $query->where(['category_id' => $this->type]);
+        elseif ($this->type === 'o') $query->whereNotIn('category_id', array_keys($ls));
+
+        // 数据查询分页
+        $query->where(['is_deleted' => 0])->like('name,remark')->dateBetween('create_at')->order('id desc')->page();
     }
 
     /**
