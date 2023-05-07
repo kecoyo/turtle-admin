@@ -15,9 +15,6 @@ class ButlerCategory extends Model
     /**
      * 获取账号数据
      * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public static function items(): array
     {

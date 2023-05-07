@@ -63,7 +63,7 @@
                 <thead>
                 <tr>
                     <td class="text-left">
-                        <input name="pictures" type="hidden" data-path="account_picture" value="{$vo.pictures|default=''}">
+                        <input name="pictures" type="hidden" data-path="account_picture" value="{$vo.pictures_str|default=''}">
                         <script>$('[name="pictures"]').uploadMultipleImage();</script>
                     </td>
                 </tr>
@@ -74,29 +74,28 @@
         <label class="layui-form-item relative block">
             <span class="color-green font-w7">账号描述</span>
             <span class="color-desc margin-left-5"></span>
-            <textarea class="layui-textarea" name="remark" placeholder="请输入分类描述">{$vo.remark|default=''}</textarea>
+            <textarea class="layui-textarea" name="remark" placeholder="请输入账号描述">{$vo.remark|default=''}</textarea>
         </label>
-    </div>
 
-    <div class="hr-line-dashed"></div>
-    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
-    {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
+        <div class="hr-line-dashed"></div>
 
-    <div class="layui-form-item text-center">
-        <button class="layui-btn" type='submit'>保存数据</button>
-        <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+        {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
+
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type='submit'>保存数据</button>
+            <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+        </div>
     </div>
 </form>
-</div>
+
+<label class="layui-hide">
+    <textarea id="AccountProperties">{$vo.properties_str|default=''}</textarea>
+</label>
 
 {block name='script'}
-<label class="layui-hide">
-    <textarea id="AccountProperties">{$vo.properties|raw|default=''}</textarea>
-</label>
 <script>
-    layui.form.render();
     require(['angular'], function () {
-
         var app = angular.module("AccountEditForm", []).run(callback);
         angular.bootstrap(document.getElementById(app.name), [app.name]);
 
@@ -136,4 +135,3 @@
     });
 </script>
 {/block}
-

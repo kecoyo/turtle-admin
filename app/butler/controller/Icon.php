@@ -31,30 +31,6 @@ class Icon extends Controller
      */
     public function index()
     {
-        // $this->title = '图标管理';
-        // // 分类数据统计
-
-        // $this->clist = $this->app->db->name('ButlerIconType')->where(['is_deleted' => 0])->order('sort asc,id desc')->column('id,name', 'id');
-
-        // $this->app->db->name($this->table)->fieldRaw('type_id,count(1) total')->where(['is_deleted' => 0, 'status' => 1])->group('type_id')->select()->map(function ($vo) {
-        //     if (isset($this->clist[$vo['type_id']])) {
-        //         $this->clist[$vo['type_id']]['total'] = $vo['total'];
-        //     }
-        // });
-
-        // $first = current($this->clist);
-
-        // $this->type_id = input('type_id', $first ? $first['id'] : '');
-
-        // $this->img_url = 'http://cdn.kecoyo.com/';
-
-        // ButlerIcon::mQuery(null, function (QueryHelper $query) {
-        //     // 列表选项卡
-        //     if (is_numeric($this->type_id)) $query->where(['type_id' => $this->type_id]);
-
-        //     $query->where(['is_deleted' => 0])->order('sort asc,id desc')->page(false);
-        // });
-
          // 账号类目分组
          [$ts, $ls] = [[], ButlerIconType::items()];
          foreach ($ls as $k => $v) $ts["{$v['id']}"] = ['id' => $v['id'], 'name' => $v['name'], 'count' => 0,];
@@ -90,6 +66,7 @@ class Icon extends Controller
      */
     public function add()
     {
+        $this->title = '添加图标';
         ButlerIcon::mForm('form');
     }
 

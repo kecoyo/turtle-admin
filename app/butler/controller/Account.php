@@ -4,6 +4,7 @@ namespace app\butler\controller;
 
 use app\butler\model\ButlerAccount;
 use app\butler\model\ButlerCategory;
+use app\butler\model\ButlerIcon;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 use think\admin\helper\QueryHelper;
@@ -15,12 +16,6 @@ use think\admin\helper\QueryHelper;
  */
 class Account extends Controller
 {
-    /**
-     * 绑定数据表
-     * @var string
-     */
-    private $table = 'ButlerAccount';
-
     /**
      * 账号管理
      * @auth true
@@ -79,8 +74,17 @@ class Account extends Controller
         if ($this->request->isGet()) {
             if (!isset($data['id'])) {
                 $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
-                $data['icon'] = '//cdn.kecoyo.com/upload/butler_icon/60/73c09bbc4f2b3c0bbef121c216bb96.png';
-                $data['properties'] = '[{"name":"账号","value":"kecoyo"}]';
+
+                $iconInfo = ButlerIcon::mk()->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+                if (!empty($iconInfo)) {
+                    $data['icon'] = $iconInfo['url'];
+                }
+
+                $data['properties_str'] = '[{"name":"账号","value":"kecoyo"}]';
+                $data['pictures_str'] = '';
+            } else {
+                $data['properties_str'] = json_encode($data['properties']);
+                $data['pictures_str'] = implode("|", $data['pictures']);
             }
         }
     }
@@ -112,7 +116,7 @@ class Account extends Controller
      */
     public function move()
     {
-        ButlerAccount::mForm('form');
+        ButlerAccount::mForm('move');
     }
 
     /**
