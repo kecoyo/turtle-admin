@@ -2,6 +2,8 @@
 
 namespace app\butler\controller\api;
 
+use app\butler\model\ButlerIcon;
+use app\butler\model\ButlerIconType;
 use think\admin\Controller;
 
 /**
@@ -21,13 +23,13 @@ class Plugs extends Controller
         $this->field = $this->app->request->get('field', 'icon');
 
         // 分类数据
-        $this->clist = $this->app->db->name('ButlerIconType')
+        $this->clist = ButlerIconType::mk()
             ->where(['is_deleted' => 0, 'status' => 1])
             ->order('sort asc,id desc')
             ->column('id,name', 'id');
 
         // 分类数据统计
-        $this->app->db->name('ButlerIcon')
+        ButlerIcon::mk()
             ->fieldRaw('type_id,count(1) total')
             ->where(['is_deleted' => 0, 'status' => 1])
             ->group('type_id')
@@ -44,7 +46,7 @@ class Plugs extends Controller
         $this->type_id = input('type_id', $first ? $first['id'] : '');
 
         // 图标列表查询
-        $this->list = $this->app->db->name('ButlerIcon')
+        $this->list = ButlerIcon::mk()
             ->where(['is_deleted' => 0, 'status' => 1, 'type_id' => $this->type_id])
             ->order('sort asc,id desc')
             ->select();
