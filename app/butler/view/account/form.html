@@ -1,6 +1,5 @@
 {include file='account/formstyle'}
-<div style="height: 500px; overflow: auto;">
-<form id="AccountEditForm" class="layui-form layui-card" action="{:request()->url()}" data-auto="true" method="post" autocomplete="off">
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" id="AccountEditForm" data-table-id="AccountTable">
     <div class="layui-card-body padding-left-40">
 
         <div class="layui-row layui-col-space15">
@@ -64,7 +63,7 @@
                 <thead>
                 <tr>
                     <td class="text-left">
-                        <input name="pictures" type="hidden" data-updir="account_picture" value="{$vo.pictures|default=''}">
+                        <input name="pictures" type="hidden" data-path="account_picture" value="{$vo.pictures|default=''}">
                         <script>$('[name="pictures"]').uploadMultipleImage();</script>
                     </td>
                 </tr>
@@ -80,7 +79,6 @@
     </div>
 
     <div class="hr-line-dashed"></div>
-
     {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
     {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
 

@@ -22,7 +22,7 @@ class ButlerCategory extends Model
     public static function items(): array
     {
         $query = static::mk()->where(['status' => 1, 'is_deleted' => 0]);
-        return $query->field('id,name,remark')->order('sort desc,id desc')->select()->toArray();
+        return $query->field('id,name')->order('sort asc,id desc')->select()->toArray();
     }
 
     /**

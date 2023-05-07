@@ -1,6 +1,6 @@
 {extend name="../../admin/view/main"}
 
-{block name="button"}
+{block name='button'}
 <!--{if auth("add")}-->
 <button data-open='{:url("add")}?type_id={$type_id}' data-title="添加图标" class='layui-btn layui-btn-sm layui-btn-primary'>添加图标</button>
 <!--{/if}-->
@@ -10,19 +10,21 @@
 <!--{/if}-->
 {/block}
 
-{block name="content"}
+{block name='content'}
 {include file='icon/indexstyle'}
 <div class="layui-tab layui-tab-card table-block">
     <ul class="layui-tab-title notselect">
-        {foreach $clist as $k=>$v}
-        {if isset($type_id) and $type_id eq $k}
-        <li data-open="{:url('index')}?type_id={$k}" class="layui-this">{$v.name}<sup class="layui-badge border-radius">{$v.total??0}</sup></li>
+        {foreach $total as $k=>$v}{if isset($type_id) and $type_id eq $k}
+        <li class="layui-this" data-open="{:url('index')}?type_id={$k}">
+            <span>{$v.name}</span><sup class="layui-badge border-radius">{$v.count|default=0}</sup>
+        </li>
         {else}
-        <li data-open="{:url('index')}?type_id={$k}">{$v.name}<sup class="layui-badge border-radius">{$v.total??0}</sup></li>
-        {/if}
-        {/foreach}
+        <li data-open="{:url('index')}?type_id={$k}">
+            <span>{$v.name}</span><sup class="layui-badge border-radius">{$v.count|default=0}</sup>
+        </li>
+        {/if}{/foreach}
     </ul>
-    <div class="layui-tab-content table-block">
+    <div class="layui-tab-content table-block" id="IconList">
         <div class='icon-list-checkall think-checkbox'>
             <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'> 全选</label>
         </div>
@@ -39,4 +41,15 @@
         {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
     </div>
 </div>
+{/block}
+
+{block name='script'}
+<script>
+    $(function () {
+        $('#IconList').css({
+            height: $('.layui-card-body').height() - 111,
+            overflow: 'auto',
+        });
+    });
+</script>
 {/block}

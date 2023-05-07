@@ -2,8 +2,10 @@
 
 namespace app\butler\controller;
 
+use app\butler\model\ButlerCategory;
+use app\butler\model\ButlerIcon;
 use think\admin\Controller;
-use think\admin\extend\DataExtend;
+use think\admin\helper\QueryHelper;
 
 /**
  * 分类管理
@@ -12,12 +14,6 @@ use think\admin\extend\DataExtend;
  */
 class Category extends Controller
 {
-    /**
-     * 绑定数据表
-     * @var string
-     */
-    private $table = 'ButlerCategory';
-
     /**
      * 分类管理
      * @auth true
@@ -28,91 +24,66 @@ class Category extends Controller
      */
     public function index()
     {
-        $this->title = "分类管理";
-        $query = $this->_query($this->table)->like('name')->dateBetween('create_at');
-        $query->equal('status')->where(['is_deleted' => 0])->order('sort asc,id desc')->page(false);
+        ButlerCategory::mQuery()->layTable(function () {
+            $this->title = '分类管理';
+        }, function (QueryHelper $query) {
+            $query->where(['is_deleted' => 0]);
+            $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
+        });
     }
 
     /**
-     * 添加分类
+     * 添加系统权限
      * @auth true
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public function add()
     {
-        $this->_applyFormToken();
-        $this->_form($this->table, 'form');
+        ButlerCategory::mForm('form');
     }
 
     /**
-     * 编辑分类
+     * 编辑系统权限
      * @auth true
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public function edit()
     {
-        $this->_applyFormToken();
-        $this->_form($this->table, 'form');
+        ButlerCategory::mForm('form');
     }
 
     /**
-     * 删除分类
-     * @auth true
-     * @throws \think\db\exception\DbException
+     * 表单数据处理
+     * @param array $data
      */
-    public function remove()
+    protected function _form_filter(array &$data)
     {
-        $this->_delete($this->table);
+        if ($this->request->isGet()) {
+            if (!isset($data['id'])) {
+                $iconInfo = ButlerIcon::mk()->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+                if (!empty($iconInfo)) {
+                    $data['icon'] = $iconInfo['url'];
+                }
+            }
+        }
     }
 
     /**
-     * 修改分类状态
+     * 修改权限状态
      * @auth true
-     * @throws \think\db\exception\DbException
      */
     public function state()
     {
-        $this->_save($this->table, $this->_vali([
+        ButlerCategory::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
     }
 
     /**
-     * 调整分类顺序
+     * 删除系统权限
      * @auth true
-     * @throws \think\db\exception\DbException
      */
-    public function sort()
+    public function remove()
     {
-        $id = intval($this->app->request->post('id', 0));
-        $sort = intval($this->app->request->post('sort', 0));
-
-        if (!$id || !$sort) {
-            $this->error(lang('think_library_sort_error'));
-        }
-
-        // 账号列表
-        $list = $this->app->db->name($this->table)->where(['is_deleted' => 0])->order('sort asc,id desc')->select()->toArray();
-
-        // 查找原位置
-        $index = array_search($id, array_column($list, 'id'));
-
-        // 数组排序
-        array_splice($list, $sort - 1, 0, array_splice($list, $index, 1));
-
-        // 修改有变化排序号
-        foreach ($list as $key => $vo) {
-            $new_sort = $key + 1;
-            if ($new_sort !== $vo['sort']) {
-                $this->app->db->name($this->table)->where(['id' => $vo['id']])->update(['sort' => $new_sort]);
-            }
-        }
-
-        $this->success(lang('think_library_sort_success'));
+        ButlerCategory::mDelete();
     }
 }

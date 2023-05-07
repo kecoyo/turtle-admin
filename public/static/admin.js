@@ -568,6 +568,21 @@ $(function () {
         });
     };
 
+    /*! 选择账号图标 */
+    $.fn.selectButlerIcon = function () {
+        return this.each(function ($in, $tpl) {
+            $in = $(this), $tpl = $('<a class="butler-icon transition"></a>');
+            $tpl.attr('data-field', $in.attr('name') || 'icon').data('input', this);
+            $tpl.on('click', function (event) {
+                var location = '/butler/api.plugs/icon', field = this.dataset.field;
+                $.form.iframe(location + (location.indexOf('?') > -1 ? '&' : '?') + 'field=' + field, '图标选择');
+            });
+            $in.attr('name', $tpl.attr('data-field')).after($tpl).on('change', function () {
+                if (this.value) $tpl.css('backgroundImage', 'url(' + encodeURI(this.value) + ')');
+            }).trigger('change');
+        }), this;
+      };
+
     /*! 标签输入插件 */
     $.fn.initTagInput = function () {
         return this.each(function () {

@@ -2,97 +2,111 @@
 
 {block name="button"}
 <!--{if auth("move")}-->
-<button data-modal='{:url("move")}?category_id={$category_id}' data-rule="id#{key}" data-title="移动账号" class='layui-btn layui-btn-sm layui-btn-primary'>移动账号</button>
+<button data-modal='{:url("move")}?category_id={$category_id}' data-rule="id#{id}" data-table-id="AccountTable" data-title="移动账号" class='layui-btn layui-btn-sm layui-btn-primary'>移动账号</button>
 <!--{/if}-->
 
 <!--{if auth("add")}-->
-<button data-modal='{:url("add")}?category_id={$category_id}' data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
+<button data-modal='{:url("add")}?category_id={$category_id}' data-width="800px" data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
-<button data-action='{:url("remove")}' data-rule="id#{key}" data-confirm="确定要删除这些账号吗？" class='layui-btn layui-btn-sm layui-btn-primary'>删除账号</button>
+<button data-action='{:url("remove")}' data-rule="id#{id}" data-table-id="AccountTable" data-confirm="确定要删除这些账号吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
 <!--{/if}-->
 {/block}
 
 {block name="content"}
-{include file='icon/indexstyle'}
-<div class="layui-tab layui-tab-card table-block">
-    <ul class="layui-tab-title notselect">
-        {foreach $clist as $k=>$v}
-        {if isset($category_id) and $category_id eq $k}
-        <li data-open="{:url('index')}?category_id={$k}" class="layui-this">{$v.name}<sup class="layui-badge border-radius">{$v.total??0}</sup></li>
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        {foreach $total as $k=>$v}{if isset($category_id) and $category_id eq $k}
+        <li class="layui-this" data-open="{:url('index')}?category_id={$k}">
+            <span>{$v.name}</span><sup class="layui-badge border-radius">{$v.count|default=0}</sup>
+        </li>
         {else}
-        <li data-open="{:url('index')}?category_id={$k}">{$v.name}<sup class="layui-badge border-radius">{$v.total??0}</sup></li>
-        {/if}
-        {/foreach}
+        <li data-open="{:url('index')}?category_id={$k}">
+            <span>{$v.name}</span><sup class="layui-badge border-radius">{$v.count|default=0}</sup>
+        </li>
+        {/if}{/foreach}
     </ul>
-    <div class="layui-tab-content table-block">
-        <table class="layui-table margin-top-10" lay-skin="line">
-            {notempty name='list'}
-            <thead>
-            <tr>
-                <th class='list-table-check-td think-checkbox'>
-                    <label><input data-auto-none data-check-target='.list-check-box' type='checkbox'></label>
-                </th>
-                <th class='list-table-sort-td'>
-                    <button type="button" data-reload class="layui-btn layui-btn-xs">刷 新</button>
-                </th>
-                <th class="text-left nowrap">账号ID</th>
-                <th class="text-left nowrap">账号图标</th>
-                <th class="text-left nowrap">账号名称</th>
-                <th class="text-left nowrap">主要属性</th>
-                <th class="text-left nowrap">图片数量</th>
-                <th class="text-left nowrap">账号状态</th>
-                <th class="text-left nowrap">创建时间</th>
-                <th class="text-left nowrap"></th>
-            </tr>
-            </thead>
-            {/notempty}
-            <tbody>
-            {foreach $list as $key=>$vo}
-            <tr>
-                <td class='list-table-check-td think-checkbox'>
-                    <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
-                </td>
-                <td class='list-table-sort-td'>
-                    <label><input data-action-sort="{:url('sort')}" data-value="id#{$vo.id};sort#{value};category_id#{$category_id}" data-loading value="{$vo.sort}" class="list-sort-input"></label>
-                </td>
-                <td class="text-left nowrap">{$vo.id}</td>
-                <td class="text-left nowrap"><div class="headimg" data-tips-image data-lazy-src="{$vo.icon|default=''}"></div></td>
-                <td class="text-left nowrap">{$vo.name|default=''}</td>
-                <td class="text-left nowrap">
-                    {notempty name='vo.first_property'}
-                    {$vo.first_property['name']}: {$vo.first_property['value'] ?: '-'}
-                    {/notempty}
-                </td>
-                <td class="text-left nowrap text-center">{$vo.picture_num}</td>
-                <td class="text-left nowrap">{if $vo.status eq 0}<span class="color-red">已禁用</span>{elseif $vo.status eq 1}<span class="color-green">已激活</span>{/if}</td>
-                <td class="text-left nowrap">{$vo.create_at|format_datetime}</td>
-                <td class='text-left nowrap'>
-
-                    <!--{if auth("edit")}-->
-                    <a data-dbclick class="layui-btn layui-btn-sm" data-title="编辑账号" data-modal='{:url("edit")}?id={$vo.id}'>编 辑</a>
-                    <!--{/if}-->
-
-                    <!--{if auth("state") and $vo.status eq 1}-->
-                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('state')}" data-value="id#{$vo.id};status#0">禁 用</a>
-                    <!--{/if}-->
-
-                    <!--{if auth("state") and $vo.status eq 0}-->
-                    <a class="layui-btn layui-btn-sm layui-btn-warm" data-action="{:url('state')}" data-value="id#{$vo.id};status#1">激 活</a>
-                    <!--{/if}-->
-
-                    <!--{if auth("remove")}-->
-                    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="确定要删除该账号吗？" data-action="{:url('remove')}" data-value="id#{$vo.id}">删 除</a>
-                    <!--{/if}-->
-
-                </td>
-            </tr>
-            {/foreach}
-            </tbody>
-        </table>
-        {empty name='list'}<span class="notdata">没有记录哦</span>{else}{$pagehtml|raw|default=''}{/empty}
+    <div class="layui-tab-content">
+        {include file='account/index_search'}
+        <table id="AccountTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
     </div>
 </div>
 {/block}
 
+{block name='script'}
+<style>
+    .headimg-xs {
+        width: 30px;
+        height: 30px;
+        top: -2px;
+    }
+</style>
+<script>
+    $(function () {
+        // 初始化表格组件
+        $('#AccountTable').layTable({
+            even: true, height: 'full',
+            where: {category_id: '{$category_id}'},
+            sort: {field: 'sort desc,id', type: 'desc'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'sort', title: '排序权重', align: 'center', width: 100, sort: true, templet: '#SortInputTpl'},
+                {field: 'icon', title: '账号图标', width: 100, align: 'center', templet: function (d) {
+                        if (!d.icon) return '-';
+                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{{d.icon}}"></div>').render(d);
+                    }
+                },
+                {field: 'name', title: '账号名称', align: 'center', minWidth: 140},
+                {
+                    field: 'remark', title: '主要属性', align: 'center', minWidth: 110, templet: function (d) {
+                        if (d.properties.length === 0) return '-';
+                        return layui.laytpl('<div>{{d.properties[0].name}}: {{d.properties[0].value}}</div>').render(d);
+                    }
+                },
+                {field: 'pictures', title: '图片数量', align: 'center', minWidth: 110, templet: '<div>{{d.pictures.length}}</div>'},
+                {field: 'status', title: '账号状态', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '创建时间', align: 'center', minWidth: 170, sort: true},
+                {toolbar: '#toolbar', title: '操作面板', align: 'center', minWidth: 210, fixed: 'right'},
+            ]]
+        });
+
+        // 数据状态切换操作
+        layui.form.on('switch(StatusSwitch)', function (obj) {
+            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+            $.form.load("{:url('state')}", data, 'post', function (ret) {
+                if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+                    $('#AccountTable').trigger('reload');
+                });
+                return false;
+            }, false);
+        });
+    });
+
+</script>
+
+<!-- 列表排序权重模板 -->
+<script type="text/html" id="SortInputTpl">
+    <input type="number" min="0" data-blur-number="0" data-action-blur="{:request()->url()}" data-value="id#{{d.id}};action#sort;sort#{value}" data-loading="false" value="{{d.sort}}" class="layui-input text-center">
+</script>
+
+<!-- 数据状态切换模板 -->
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="已激活|已禁用" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '<b class="color-green">已启用</b>' : '<b class="color-red">已禁用</b>'}}
+    <!--{/if}-->
+</script>
+
+<!-- 数据操作工具条模板 -->
+<script type="text/html" id="toolbar">
+    <!--{if auth('edit')}-->
+    <a class="layui-btn layui-btn-primary layui-btn-sm" data-event-dbclick data-width="800px" data-title="编辑账号" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
+    <!--{/if}-->
+
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-danger layui-btn-sm" data-confirm="确定要删除账号吗?" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+    <!--{/if}-->
+</script>
+{/block}

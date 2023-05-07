@@ -1,4 +1,4 @@
-{extend name='table'}
+{extend name="../../admin/view/table"}
 
 {block name='button'}
 <!--{if auth("add")}-->
@@ -12,7 +12,7 @@
 
 {block name='content'}
 <div class="think-box-shadow">
-    {include file='category/index_search'}
+    {include file='icon_type/index_search'}
     <table id="DataTable" data-url="{:request()->url()}" data-target-search="form.form-search"></table>
 </div>
 {/block}
