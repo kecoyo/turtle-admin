@@ -35,7 +35,7 @@ class Icon extends Controller
          [$ts, $ls] = [[], ButlerIconType::items()];
          foreach ($ls as $k => $v) $ts["{$v['id']}"] = ['id' => $v['id'], 'name' => $v['name'], 'count' => 0,];
          // 图标分类统计
-         foreach (ButlerIcon::mk()->where(['is_deleted' => 0])->field('type_id,count(1) count')->group('type_id')->cursor() as $v) {
+         foreach (ButlerIcon::mk()->where(['deleted' => 0])->field('type_id,count(1) count')->group('type_id')->cursor() as $v) {
              [$name, $count] = ["{$v['type_id']}", $v['count']];
              if (isset($ts[$name])) {
                  $ts[$name]['count'] += $count;
@@ -56,7 +56,7 @@ class Icon extends Controller
          }
 
          // 数据查询
-         $query->where(['is_deleted' => 0])->order('sort asc,id desc')->page(false);
+         $query->where(['deleted' => 0])->order('sort asc,id desc')->page(false);
 
     }
 

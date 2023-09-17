@@ -27,7 +27,7 @@ class Category extends Controller
         ButlerCategory::mQuery()->layTable(function () {
             $this->title = '分类管理';
         }, function (QueryHelper $query) {
-            $query->where(['is_deleted' => 0]);
+            $query->where(['deleted' => 0]);
             $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -58,7 +58,7 @@ class Category extends Controller
     {
         if ($this->request->isGet()) {
             if (!isset($data['id'])) {
-                $iconInfo = ButlerIcon::mk()->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+                $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
                 if (!empty($iconInfo)) {
                     $data['icon'] = $iconInfo['url'];
                 }

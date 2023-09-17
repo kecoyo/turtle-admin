@@ -24,14 +24,14 @@ class Plugs extends Controller
 
         // 分类数据
         $this->clist = ButlerIconType::mk()
-            ->where(['is_deleted' => 0, 'status' => 1])
+            ->where(['deleted' => 0, 'status' => 1])
             ->order('sort asc,id desc')
             ->column('id,name', 'id');
 
         // 分类数据统计
         ButlerIcon::mk()
             ->fieldRaw('type_id,count(1) total')
-            ->where(['is_deleted' => 0, 'status' => 1])
+            ->where(['deleted' => 0, 'status' => 1])
             ->group('type_id')
             ->select()
             ->map(function ($vo) {
@@ -47,7 +47,7 @@ class Plugs extends Controller
 
         // 图标列表查询
         $this->list = ButlerIcon::mk()
-            ->where(['is_deleted' => 0, 'status' => 1, 'type_id' => $this->type_id])
+            ->where(['deleted' => 0, 'status' => 1, 'type_id' => $this->type_id])
             ->order('sort asc,id desc')
             ->select();
 

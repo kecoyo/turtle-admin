@@ -33,7 +33,7 @@ class Account extends Controller
             [$ts, $ls] = [[], ButlerCategory::items()];
             foreach ($ls as $k => $v) $ts["{$v['id']}"] = ['id' => $v['id'], 'name' => $v['name'], 'count' => 0,];
             // 等级分组统计
-            foreach (ButlerAccount::mk()->where(['is_deleted' => 0])->field('category_id,count(1) count')->group('category_id')->cursor() as $v) {
+            foreach (ButlerAccount::mk()->where(['deleted' => 0])->field('category_id,count(1) count')->group('category_id')->cursor() as $v) {
                 [$name, $count] = ["{$v['category_id']}", $v['count']];
                 if (isset($ts[$name])) {
                     $ts[$name]['count'] += $count;
@@ -42,7 +42,7 @@ class Account extends Controller
             $this->total = $ts;
             $this->category_id = $this->get['category_id'] ?? (array_keys($ts)[0] ?? '-');
         }, function (QueryHelper $query) {
-            $query->where(['is_deleted' => 0]);
+            $query->where(['deleted' => 0]);
             $query->like('name,remark')->equal('category_id,status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -75,7 +75,7 @@ class Account extends Controller
             if (!isset($data['id'])) {
                 $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
 
-                $iconInfo = ButlerIcon::mk()->where(['is_deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+                $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
                 if (!empty($iconInfo)) {
                     $data['icon'] = $iconInfo['url'];
                 }
@@ -126,7 +126,7 @@ class Account extends Controller
     protected function _move_form_filter(array &$data)
     {
         if ($this->request->isGet()) {
-            $this->clist = ButlerCategory::mk()->where(['is_deleted' => 0, 'status' => 1])->order('sort asc,id desc')->select()->toArray();
+            $this->clist = ButlerCategory::mk()->where(['deleted' => 0, 'status' => 1])->order('sort asc,id desc')->select()->toArray();
             $this->category_id = input('category_id', '0');
             $this->ids = input('id', '');
         } else {

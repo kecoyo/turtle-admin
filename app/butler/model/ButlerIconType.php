@@ -20,7 +20,7 @@ class ButlerIconType extends Model
      */
     public static function items(): array
     {
-        $query = static::mk()->where(['status' => 1, 'is_deleted' => 0]);
+        $query = static::mk()->where(['status' => 1, 'deleted' => 0]);
         return $query->field('id,name')->order('sort asc,id desc')->select()->toArray();
     }
 

@@ -26,7 +26,7 @@ class IconType extends Controller
         ButlerIconType::mQuery()->layTable(function () {
             $this->title = '图标分类管理';
         }, function (QueryHelper $query) {
-            $query->where(['is_deleted' => 0]);
+            $query->where(['deleted' => 0]);
             $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
