@@ -1,0 +1,33 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="RoleTable">
+
+    <div class="layui-card-body padding-left-40">
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>应用名称</b></span>
+            <input maxlength="100" class="layui-input" name="name" value='{$vo.name|default=""}' required vali-name="应用名称" placeholder="请输入应用名称">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>微信AppId</b></span>
+            <input maxlength="100" class="layui-input" name="wechat_app_id" value='{$vo.wechat_app_id|default=""}' required vali-name="微信AppId" placeholder="请输入微信AppId">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>微信AppSecret</b></span>
+            <input maxlength="100" class="layui-input" name="wechat_app_secret" value='{$vo.wechat_app_secret|default=""}' required vali-name="微信AppSecret" placeholder="请输入微信AppSecret">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>应用备注</b></span>
+            <textarea class="layui-textarea" name="remark" placeholder="请输入应用备注">{$vo.remark|default=''}</textarea>
+        </label>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
