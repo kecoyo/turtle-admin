@@ -57,7 +57,8 @@ class App extends Controller
         SystemApp::mQuery()->layTable(function () {
             $this->title = '系统应用管理';
         }, function (QueryHelper $query) {
-            $query->like('name,remark')->where(['deleted' => 0]);
+            $query->where(['deleted' => 0]);
+            $query->like('name,remark')->equal('status')->dateBetween('create_at');
         });
     }
 
