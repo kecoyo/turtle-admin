@@ -2,11 +2,11 @@
 
 {block name='button'}
 <!--{if auth("add")}-->
-<button data-modal='{:url("add")}' data-width="600px" data-table-id="DataTable" class='layui-btn layui-btn-sm layui-btn-primary'>添加分类</button>
+<button data-modal='{:url("add")}' data-width="600px" data-table-id="DataTable" class='layui-btn layui-btn-sm layui-btn-primary'>添加图标分类</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
-<button data-action='{:url("remove")}' data-rule="id#{id}" data-table-id="DataTable" data-confirm="确定要批量删除分类吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
+<button data-action='{:url("remove")}' data-rule="id#{id}" data-table-id="DataTable" data-confirm="确定要批量删除图标分类吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
 <!--{/if}-->
 {/block}
 
@@ -66,11 +66,11 @@
 <!-- 数据操作工具条模板 -->
 <script type="text/html" id="toolbar">
     <!--{if auth('edit')}-->
-    <a class="layui-btn layui-btn-primary layui-btn-sm" data-event-dbclick data-width="600px" data-title="编辑分类" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-sm" data-event-dbclick data-width="600px" data-title="编辑图标分类" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
     <!--{/if}-->
 
     <!--{if auth("remove")}-->
-    <a class="layui-btn layui-btn-danger layui-btn-sm" data-confirm="确定要删除分类吗?" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" data-confirm="确定要删除图标分类吗?" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
     <!--{/if}-->
 </script>
 {/block}

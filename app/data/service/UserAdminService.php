@@ -145,7 +145,7 @@ class UserAdminService extends Service
      * @param string $cols 返回用户字段
      * @return array
      */
-    public static function buildByUid(array &$list, string $keys = 'uuid', string $bind = 'user', string $cols = '*'): array
+    public static function buildByUid(array &$list, string $keys = 'user_id', string $bind = 'user', string $cols = '*'): array
     {
         if (count($list) < 1) return $list;
         $uids = array_unique(array_column($list, $keys));

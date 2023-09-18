@@ -50,4 +50,6 @@ return [
         404 => syspath('public/static/theme/err/404.html'),
         500 => syspath('public/static/theme/err/500.html'),
     ],
+    // 上传文件路径
+    'upload_base_url'         => 'https://cdn.kecoyo.com/',
 ];

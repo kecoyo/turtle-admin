@@ -4,18 +4,20 @@ namespace app\butler\controller;
 
 use app\butler\model\ButlerCategory;
 use app\butler\model\ButlerIcon;
+use app\data\service\UserAdminService;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
+use think\facade\Config;
 
 /**
- * 分类管理
+ * 账号分类管理
  * Class Category
  * @package app\butler\controller
  */
 class Category extends Controller
 {
     /**
-     * 分类管理
+     * 账号分类管理
      * @auth true
      * @menu true
      * @throws \think\db\exception\DataNotFoundException
@@ -25,7 +27,7 @@ class Category extends Controller
     public function index()
     {
         ButlerCategory::mQuery()->layTable(function () {
-            $this->title = '分类管理';
+            $this->title = '账号分类管理';
         }, function (QueryHelper $query) {
             $query->where(['deleted' => 0]);
             $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
@@ -33,7 +35,16 @@ class Category extends Controller
     }
 
     /**
-     * 添加系统权限
+     * 数据列表处理
+     * @param array $data
+     */
+    protected function _index_page_filter(array &$data)
+    {
+        UserAdminService::buildByUid($data);
+    }
+
+    /**
+     * 添加账号分类
      * @auth true
      */
     public function add()
@@ -42,7 +53,7 @@ class Category extends Controller
     }
 
     /**
-     * 编辑系统权限
+     * 编辑账号分类
      * @auth true
      */
     public function edit()
@@ -63,11 +74,13 @@ class Category extends Controller
                     $data['icon'] = $iconInfo['url'];
                 }
             }
+        } else {
+            $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
         }
     }
 
     /**
-     * 修改权限状态
+     * 修改账号分类状态
      * @auth true
      */
     public function state()
@@ -79,7 +92,7 @@ class Category extends Controller
     }
 
     /**
-     * 删除系统权限
+     * 删除账号分类
      * @auth true
      */
     public function remove()

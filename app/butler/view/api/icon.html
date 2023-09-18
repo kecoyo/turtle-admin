@@ -101,7 +101,7 @@
                 <ul class="icon-list">
                 {foreach $list as $key=>$vo}
                 <li class="icon-item">
-                    <div class="headimg" data-lazy-src="{$vo.url}"></div>
+                    <div class="headimg" data-lazy-src="{:config(\'app.upload_base_url\')}{$vo.url}"></div>
                 </li>
                 {/foreach}
                 </ul>

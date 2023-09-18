@@ -34,7 +34,7 @@
             <div class='think-checkbox'>
                 <label><input class="list-check-box" value='{$vo.id}' type='checkbox'></label>
             </div>
-            <div class="headimg" data-tips-image data-lazy-src="{$vo.url}"></div>
+            <div class="headimg" data-tips-image data-lazy-src="{:config(\'app.upload_base_url\')}{$vo.url}"></div>
         </li>
         {/foreach}
         </ul>

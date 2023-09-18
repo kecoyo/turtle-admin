@@ -5,6 +5,7 @@ namespace app\butler\controller;
 use app\butler\model\ButlerAccount;
 use app\butler\model\ButlerCategory;
 use app\butler\model\ButlerIcon;
+use app\data\service\UserAdminService;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 use think\admin\helper\QueryHelper;
@@ -45,6 +46,15 @@ class Account extends Controller
             $query->where(['deleted' => 0]);
             $query->like('name,remark')->equal('category_id,status')->dateBetween('create_at')->order('sort asc,id desc');
         });
+    }
+
+    /**
+     * 数据列表处理
+     * @param array $data
+     */
+    protected function _index_page_filter(array &$data)
+    {
+        UserAdminService::buildByUid($data);
     }
 
     /**

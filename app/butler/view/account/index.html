@@ -54,7 +54,7 @@
                 {field: 'sort', title: '排序权重', align: 'center', width: 100, sort: true, templet: '#SortInputTpl'},
                 {field: 'icon', title: '账号图标', width: 100, align: 'center', templet: function (d) {
                         if (!d.icon) return '-';
-                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{{d.icon}}"></div>').render(d);
+                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:config(\'app.upload_base_url\')}{{d.icon}}"></div>').render(d);
                     }
                 },
                 {field: 'name', title: '账号名称', align: 'center', minWidth: 140},
@@ -65,6 +65,12 @@
                     }
                 },
                 {field: 'pictures', title: '图片数量', align: 'center', minWidth: 110, templet: '<div>{{d.pictures.length}}</div>'},
+                {
+                    field: 'user_id', title: '所属用户', minWidth: 110, align: 'center', templet: function (d) {
+                        d.user = d.user || {};
+                        return d.user.id ? d.user.name : '-';
+                    }
+                },
                 {field: 'status', title: '账号状态', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
                 {field: 'create_at', title: '创建时间', align: 'center', minWidth: 170, sort: true},
                 {toolbar: '#toolbar', title: '操作面板', align: 'center', minWidth: 210, fixed: 'right'},

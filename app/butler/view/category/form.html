@@ -5,7 +5,7 @@
 
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs2 text-center">
-                <input type="hidden" name="icon" value="{$vo.icon|default=''}">
+                <input type="hidden" name="icon" value="{:config(\'app.upload_base_url\')}{$vo.icon|default=''}">
                 <script>$('[name="icon"]').selectButlerIcon();</script>
             </div>
             <div class="layui-col-xs10">

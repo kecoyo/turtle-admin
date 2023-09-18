@@ -2,11 +2,11 @@
 
 {block name='button'}
 <!--{if auth("add")}-->
-<button data-modal='{:url("add")}' data-width="600px" data-table-id="DataTable" class='layui-btn layui-btn-sm layui-btn-primary'>添加分类</button>
+<button data-modal='{:url("add")}' data-width="600px" data-table-id="DataTable" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号分类</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
-<button data-action='{:url("remove")}' data-rule="id#{id}" data-table-id="DataTable" data-confirm="确定要批量删除分类吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
+<button data-action='{:url("remove")}' data-rule="id#{id}" data-table-id="DataTable" data-confirm="确定要批量删除账号分类吗？" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
 <!--{/if}-->
 {/block}
 
@@ -37,11 +37,17 @@
                 {
                     field: 'icon', title: '分类图标', width: 100, align: 'center', templet: function (d) {
                         if (!d.icon) return '-';
-                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{{d.icon}}"></div>').render(d);
+                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:config(\'app.upload_base_url\')}{{d.icon}}"></div>').render(d);
                     }
                 },
                 {field: 'name', title: '分类名称', align: 'center', minWidth: 140},
                 {field: 'remark', title: '分类描述', align: 'center', minWidth: 110, templet: '<div>{{d.remark||"-"}}</div>'},
+                {
+                    field: 'user_id', title: '所属用户', minWidth: 110, align: 'center', templet: function (d) {
+                        d.user = d.user || {};
+                        return d.user.id ? d.user.name : '-';
+                    }
+                },
                 {field: 'status', title: '分类状态', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
                 {field: 'create_at', title: '创建时间', align: 'center', minWidth: 170, sort: true},
                 {toolbar: '#toolbar', title: '操作面板', align: 'center', minWidth: 210, fixed: 'right'},
@@ -79,11 +85,11 @@
 <!-- 数据操作工具条模板 -->
 <script type="text/html" id="toolbar">
     <!--{if auth('edit')}-->
-    <a class="layui-btn layui-btn-primary layui-btn-sm" data-event-dbclick data-width="600px" data-title="编辑分类" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
+    <a class="layui-btn layui-btn-primary layui-btn-sm" data-event-dbclick data-width="600px" data-title="编辑账号分类" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
     <!--{/if}-->
 
     <!--{if auth("remove")}-->
-    <a class="layui-btn layui-btn-danger layui-btn-sm" data-confirm="确定要删除分类吗?" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
+    <a class="layui-btn layui-btn-danger layui-btn-sm" data-confirm="确定要删除账号分类吗?" data-action="{:url('remove')}" data-value="id#{{d.id}}">删 除</a>
     <!--{/if}-->
 </script>
 {/block}
