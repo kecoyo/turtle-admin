@@ -2,7 +2,7 @@
     <div class="image-dialog-head">
         <div class="pull-left flex">
             <input class="layui-input margin-right-5" v-model="keys" style="height:30px;line-height:30px" placeholder="请输入搜索关键词">
-            <a class="layui-btn layui-btn-sm layui-btn-normal" @click="search">搜 索</a>
+            <a class="layui-btn layui-btn-sm layui-btn-normal" style="width: 60px;" @click="search">搜 索</a>
         </div>
         <div class="pull-right">
             <a class="layui-btn layui-btn-sm layui-btn-normal" @click="uploadImage">上传图片</a>
@@ -108,6 +108,8 @@
                 // 加载页面数据
                 loadPage: function () {
                     this.params = {page: this.page, limit: this.limit, output: 'layui.table', name: this.keys || ''};
+                    this.params.appid = '{$get.appid|default="0"}';
+                    this.params.tags = '{$get.tags|default=""}';
                     this.params.type = '{$get.type|default="gif,png,jpg,jpeg"}';
                     $.form.load('{:url("image",[],false,true)}', this.params, 'get', function (ret) {
                         return app.setList(ret.data, ret.count), false;
@@ -130,14 +132,14 @@
 <label class="layui-hide" id="ImageDialogUploadLayout">
     <!-- 图片上传组件 开始 -->
     {if isset($get.file) && $get.file eq 'image'}
-    <button data-file="one" data-type="gif,png,jpg,jpeg"
-            data-path="{$get.path|default=''}" data-size="{$get.size|default=0}"
+    <button data-file="one" data-type="gif,png,jpg,jpeg" data-size="{$get.size|default=0}"
+            data-appid="{$get.appid|default='0'}" data-tags="{$get.tags|default=''}"
             data-cut-width="{$get.cutWidth|default=0}" data-cut-height="{$get.cutHeight|default=0}"
             data-max-width="{$get.maxWidth|default=0}" data-max-height="{$get.maxHeight|default=0}"
     ></button>
     {else}
-    <button data-file="mul" data-type="gif,png,jpg,jpeg"
-            data-path="{$get.path|default=''}" data-size="{$get.size|default=0}"
+    <button data-file="mul" data-type="gif,png,jpg,jpeg" data-size="{$get.size|default=0}"
+            data-appid="{$get.appid|default='0'}" data-tags="{$get.tags|default=''}"
             data-cut-width="{$get.cutWidth|default=0}" data-cut-height="{$get.cutHeight|default=0}"
             data-max-width="{$get.maxWidth|default=0}" data-max-height="{$get.maxHeight|default=0}"
     ></button>

@@ -7,6 +7,7 @@ use app\butler\model\ButlerIconType;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 use think\exception\HttpResponseException;
+use think\facade\Config;
 
 /**
  * 图标管理
@@ -90,7 +91,7 @@ class Icon extends Controller
             foreach ($urls as $url) {
                 $result = data_save('ButlerIcon', [
                     'type_id'   => $data['type_id'],
-                    'url'       => $url,
+                    'url'       => str_replace(Config::get('app.upload_base_url'), '', $url),
                 ]);
                 if ($result === false) break;
             }

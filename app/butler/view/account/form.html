@@ -4,7 +4,7 @@
 
         <div class="layui-row layui-col-space15">
             <div class="layui-col-xs2 text-center">
-                <input type="hidden" name="icon" value="{$vo.icon|default=''}">
+                <input type="hidden" name="icon" value="{:config(\'app.upload_base_url\')}{$vo.icon|default=''}">
                 <script>$('[name="icon"]').selectButlerIcon();</script>
             </div>
             <div class="layui-col-xs10">
@@ -63,7 +63,7 @@
                 <thead>
                 <tr>
                     <td class="text-left">
-                        <input name="pictures" type="hidden" data-path="account_picture" value="{$vo.pictures_str|default=''}">
+                        <input name="pictures" type="hidden" data-appid="1" data-tags="account_picture" value="{$vo.pictures_str|default=''}">
                         <script>$('[name="pictures"]').uploadMultipleImage();</script>
                     </td>
                 </tr>
@@ -79,8 +79,12 @@
 
         <div class="hr-line-dashed"></div>
 
-        {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
-        {notempty name='vo.category_id'}<input type='hidden' value='{$vo.category_id}' name='category_id'>{/notempty}
+        {if empty($vo.id)}
+        <input type='hidden' value='{$vo.user_id}' name='user_id'>
+        <input type='hidden' value='{$vo.category_id}' name='category_id'>
+        {else}
+        <input type='hidden' value='{$vo.id}' name='id'>
+        {/if}
 
         <div class="layui-form-item text-center">
             <button class="layui-btn" type='submit'>保存数据</button>

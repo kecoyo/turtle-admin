@@ -2,7 +2,7 @@
 
 {block name="button"}
 <!--{if auth("distinct")}-->
-<a data-table-id="FileTable" data-load='{:url("distinct")}' class='layui-btn layui-btn-sm layui-btn-primary'>清理重复</a>
+<!-- <a data-table-id="FileTable" data-load='{:url("distinct")}' class='layui-btn layui-btn-sm layui-btn-primary'>清理重复</a> -->
 <!--{/if}-->
 <!--{if auth("remove")}-->
 <a data-confirm="确定删除这些记录吗？" data-table-id="FileTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</a>
@@ -22,7 +22,9 @@
             cols: [[
                 {checkbox: true, fixed: true},
                 {field: 'id', title: 'ID', width: 80, align: 'center', sort: true},
-                {field: 'name', title: '文件名称', width: '12%', align: 'center'},
+                {field: 'app_id', title: '应用ID', width: '7%', align: 'center', sort: true},
+                {field: 'tags', title: '文件标签', width: '10%', align: 'center', sort: true},
+                {field: 'name', title: '文件名称', width: '15%', align: 'center'},
                 {field: 'hash', title: '文件哈希', width: '15%', align: 'center', templet: '<div><code>{{d.hash}}</code></div>'},
                 {field: 'size', title: '文件大小', align: 'center', width: '7%', sort: true, templet: '<div>{{-$.formatFileSize(d.size)}}</div>'},
                 {field: 'xext', title: '文件后缀', align: 'center', width: '7%', sort: true},
@@ -40,12 +42,12 @@
                         return laytpl('<div><a target="_blank" href="{{d.xurl}}"  data-tips-text="查看下载"><i class="layui-icon layui-icon-file"></i></a></div>').render(d);
                     }
                 },
-                {
-                    field: 'isfast', title: '上传方式', align: 'center', width: '8%', templet: function (d) {
-                        return d.isfast ? '<b class="color-green">秒传</b>' : '<b class="color-blue">普通</b>';
-                    }
-                },
-                {field: 'ctype', title: '存储方式', align: 'center', width: '10%'},
+                // {
+                //     field: 'isfast', title: '上传方式', align: 'center', width: '8%', templet: function (d) {
+                //         return d.isfast ? '<b class="color-green">秒传</b>' : '<b class="color-blue">普通</b>';
+                //     }
+                // },
+                // {field: 'ctype', title: '存储方式', align: 'center', width: '10%'},
                 {field: 'create_at', title: '上传时间', align: 'center', width: '15%', sort: true},
                 {toolbar: '#toolbar', title: '操作面板', align: 'center', minWidth: 150, fixed: 'right'}
             ]]

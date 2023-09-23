@@ -3,6 +3,20 @@
     <form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
 
         <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">应用ID</label>
+            <label class="layui-input-inline">
+                <input name="app_id" value="{$get.app_id|default=''}" placeholder="请输入应用ID" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">文件标签</label>
+            <label class="layui-input-inline">
+                <input name="tags" value="{$get.tags|default=''}" placeholder="请输入文件标签" class="layui-input">
+            </label>
+        </div>
+
+        <div class="layui-form-item layui-inline">
             <label class="layui-form-label">文件名称</label>
             <label class="layui-input-inline">
                 <input name="name" value="{$get.name|default=''}" placeholder="请输入文件名称" class="layui-input">
@@ -30,7 +44,7 @@
             </div>
         </div>
 
-        <div class="layui-form-item layui-inline">
+        <div class="layui-form-item layui-inline" style="display: none;">
             <label class="layui-form-label">存储方式</label>
             <div class="layui-input-inline">
                 <select name="type" lay-search class="layui-select">

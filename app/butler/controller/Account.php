@@ -9,6 +9,7 @@ use app\data\service\UserAdminService;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 use think\admin\helper\QueryHelper;
+use think\facade\Config;
 
 /**
  * 账号管理
@@ -29,12 +30,13 @@ class Account extends Controller
     {
         ButlerAccount::mQuery()->layTable(function () {
             $this->title = '账号管理';
+            $this->user_id = input('user_id', '1');
 
             // 账号类目分组
-            [$ts, $ls] = [[], ButlerCategory::items()];
+            [$ts, $ls] = [[], ButlerCategory::items($this->user_id)];
             foreach ($ls as $k => $v) $ts["{$v['id']}"] = ['id' => $v['id'], 'name' => $v['name'], 'count' => 0,];
             // 等级分组统计
-            foreach (ButlerAccount::mk()->where(['deleted' => 0])->field('category_id,count(1) count')->group('category_id')->cursor() as $v) {
+            foreach (ButlerAccount::mk()->where(['deleted' => 0, 'user_id' => $this->user_id])->field('category_id,count(1) count')->group('category_id')->cursor() as $v) {
                 [$name, $count] = ["{$v['category_id']}", $v['count']];
                 if (isset($ts[$name])) {
                     $ts[$name]['count'] += $count;
@@ -43,7 +45,7 @@ class Account extends Controller
             $this->total = $ts;
             $this->category_id = $this->get['category_id'] ?? (array_keys($ts)[0] ?? '-');
         }, function (QueryHelper $query) {
-            $query->where(['deleted' => 0]);
+            $query->where(['deleted' => 0, 'user_id' => input('user_id', '1')]);
             $query->like('name,remark')->equal('category_id,status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -83,18 +85,39 @@ class Account extends Controller
     {
         if ($this->request->isGet()) {
             if (!isset($data['id'])) {
+                $data['user_id'] = input('user_id', '1');
                 $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
 
-                $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
-                if (!empty($iconInfo)) {
-                    $data['icon'] = $iconInfo['url'];
-                }
+                // $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+                // if (!empty($iconInfo)) {
+                //     $data['icon'] = $iconInfo['url'];
+                // }
 
                 $data['properties_str'] = '[{"name":"账号","value":"kecoyo"}]';
                 $data['pictures_str'] = '';
             } else {
-                $data['properties_str'] = json_encode($data['properties']);
-                $data['pictures_str'] = implode("|", $data['pictures']);
+                $data['properties_str'] = json_encode($data['properties'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $data['pictures_str'] = '';
+
+                if (isset($data['pictures'])) {
+                    $urls = [];
+                    foreach ($data['pictures'] as $picture) {
+                        $urls[] = Config::get('app.upload_base_url').$picture['url'];
+                    }
+                    $data['pictures_str'] = implode("|", $urls);
+                }
+            }
+        } else {
+            $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
+
+            // 数据转换
+            if ($data['pictures']) {
+                $pictures = [];
+                $urls = explode("|", $data['pictures']);
+                foreach ($urls as $url) {
+                    $pictures[] = ['url' => str_replace(Config::get('app.upload_base_url'), '', $url)];
+                }
+                $data['pictures'] = json_encode($pictures, JSON_UNESCAPED_SLASHES);
             }
         }
     }
@@ -136,7 +159,8 @@ class Account extends Controller
     protected function _move_form_filter(array &$data)
     {
         if ($this->request->isGet()) {
-            $this->clist = ButlerCategory::mk()->where(['deleted' => 0, 'status' => 1])->order('sort asc,id desc')->select()->toArray();
+            $this->user_id = input('user_id', '1');
+            $this->clist = ButlerCategory::mk()->where(['deleted' => 0, 'status' => 1, 'user_id' => $this->user_id])->order('sort asc,id desc')->select()->toArray();
             $this->category_id = input('category_id', '0');
             $this->ids = input('id', '');
         } else {

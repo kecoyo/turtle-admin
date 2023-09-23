@@ -28,7 +28,7 @@ class ButlerAccount extends Model
      */
     public function getPicturesAttr($value)
     {
-        return empty($value) ? [] : explode('|', $value);
+        return empty($value) ? [] : json_decode($value, true);
     }
 
     /**

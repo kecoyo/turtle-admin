@@ -16,9 +16,9 @@ class ButlerCategory extends Model
      * 获取账号数据
      * @return array
      */
-    public static function items(): array
+    public static function items($user_id): array
     {
-        $query = static::mk()->where(['status' => 1, 'deleted' => 0]);
+        $query = static::mk()->where(['status' => 1, 'deleted' => 0, 'user_id' => $user_id]);
         return $query->field('id,name')->order('sort asc,id desc')->select()->toArray();
     }
 

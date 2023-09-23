@@ -28,7 +28,11 @@
 
     <div class="hr-line-dashed"></div>
 
-    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+    {if empty($vo.id)}
+    <input type='hidden' value='{$vo.user_id}' name='user_id'>
+    {else}
+    <input type='hidden' value='{$vo.id}' name='id'>
+    {/if}
 
     <div class="layui-form-item text-center">
         <button class="layui-btn" type='submit'>保存数据</button>

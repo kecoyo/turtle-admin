@@ -28,8 +28,9 @@ class Category extends Controller
     {
         ButlerCategory::mQuery()->layTable(function () {
             $this->title = '账号分类管理';
+            $this->user_id = input('user_id', '1');
         }, function (QueryHelper $query) {
-            $query->where(['deleted' => 0]);
+            $query->where(['deleted' => 0, 'user_id' => input('user_id', '1')]);
             $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -68,12 +69,13 @@ class Category extends Controller
     protected function _form_filter(array &$data)
     {
         if ($this->request->isGet()) {
-            if (!isset($data['id'])) {
-                $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
-                if (!empty($iconInfo)) {
-                    $data['icon'] = $iconInfo['url'];
-                }
-            }
+            $data['user_id'] = input('user_id', '1');
+            // if (!isset($data['id'])) {
+            //     $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
+            //     if (!empty($iconInfo)) {
+            //         $data['icon'] = $iconInfo['url'];
+            //     }
+            // }
         } else {
             $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
         }

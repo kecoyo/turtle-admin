@@ -2,11 +2,11 @@
 
 {block name="button"}
 <!--{if auth("move")}-->
-<button data-modal='{:url("move")}?category_id={$category_id}' data-rule="id#{id}" data-table-id="AccountTable" data-title="移动账号" class='layui-btn layui-btn-sm layui-btn-primary'>移动账号</button>
+<button data-modal='{:url("move")}?category_id={$category_id}&user_id={$user_id}' data-rule="id#{id}" data-table-id="AccountTable" data-title="移动账号" class='layui-btn layui-btn-sm layui-btn-primary'>移动账号</button>
 <!--{/if}-->
 
 <!--{if auth("add")}-->
-<button data-modal='{:url("add")}?category_id={$category_id}' data-width="800px" data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
+<button data-modal='{:url("add")}?category_id={$category_id}&user_id={$user_id}' data-width="800px" data-title="添加账号" class='layui-btn layui-btn-sm layui-btn-primary'>添加账号</button>
 <!--{/if}-->
 
 <!--{if auth("remove")}-->
@@ -58,15 +58,13 @@
                     }
                 },
                 {field: 'name', title: '账号名称', align: 'center', minWidth: 140},
-                {
-                    field: 'remark', title: '主要属性', align: 'center', minWidth: 110, templet: function (d) {
+                {field: 'properties', title: '主要属性', align: 'center', minWidth: 110, templet: function (d) {
                         if (d.properties.length === 0) return '-';
                         return layui.laytpl('<div>{{d.properties[0].name}}: {{d.properties[0].value}}</div>').render(d);
                     }
                 },
                 {field: 'pictures', title: '图片数量', align: 'center', minWidth: 110, templet: '<div>{{d.pictures.length}}</div>'},
-                {
-                    field: 'user_id', title: '所属用户', minWidth: 110, align: 'center', templet: function (d) {
+                {field: 'user_id', title: '所属用户', minWidth: 110, align: 'center', templet: function (d) {
                         d.user = d.user || {};
                         return d.user.id ? d.user.name : '-';
                     }
