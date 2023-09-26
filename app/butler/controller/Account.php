@@ -5,7 +5,7 @@ namespace app\butler\controller;
 use app\butler\model\ButlerAccount;
 use app\butler\model\ButlerCategory;
 use app\butler\model\ButlerIcon;
-use app\data\service\UserAdminService;
+use app\data\service\UserService;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 use think\admin\helper\QueryHelper;
@@ -45,7 +45,8 @@ class Account extends Controller
             $this->total = $ts;
             $this->category_id = $this->get['category_id'] ?? (array_keys($ts)[0] ?? '-');
         }, function (QueryHelper $query) {
-            $query->where(['deleted' => 0, 'user_id' => input('user_id', '1')]);
+            $user_id = input('user_id', '1');
+            $query->where(['deleted' => 0, 'user_id' => $user_id]);
             $query->like('name,remark')->equal('category_id,status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -56,7 +57,7 @@ class Account extends Controller
      */
     protected function _index_page_filter(array &$data)
     {
-        UserAdminService::buildByUid($data);
+        UserService::buildByUid($data);
     }
 
     /**
@@ -88,10 +89,10 @@ class Account extends Controller
                 $data['user_id'] = input('user_id', '1');
                 $data['category_id'] = intval($data['category_id'] ?? input('category_id', '0'));
 
-                // $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
-                // if (!empty($iconInfo)) {
-                //     $data['icon'] = $iconInfo['url'];
-                // }
+                $butler_icon = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('id asc')->find();
+                if (!empty($butler_icon)) {
+                    $data['icon'] = $butler_icon['url'];
+                }
 
                 $data['properties_str'] = '[{"name":"账号","value":"kecoyo"}]';
                 $data['pictures_str'] = '';

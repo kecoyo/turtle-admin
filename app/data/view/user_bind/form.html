@@ -1,0 +1,43 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="DataTable">
+
+    <div class="layui-card-body padding-left-40">
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>应用Id</b></span>
+            <input maxlength="100" class="layui-input" name="app_id" value='{$vo.app_id|default=""}' vali-name="应用Id" placeholder="请输入应用Id">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>微信OpenId</b></span>
+            <input maxlength="100" class="layui-input" name="openid" value='{$vo.openid|default=""}' vali-name="微信OpenId" placeholder="请输入微信OpenId">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>微信UnionId</b></span>
+            <input maxlength="100" class="layui-input" name="unionid" value='{$vo.unionid|default=""}' vali-name="微信UnionId" placeholder="请输入微信UnionId">
+        </label>
+
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>用户Id</b></span>
+            <input maxlength="100" class="layui-input" name="user_id" value='{$vo.user_id|default=""}' vali-name="用户Id" placeholder="请输入用户Id">
+        </label>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    {if empty($vo.id)}
+    {else}
+    <input type='hidden' value='{$vo.id}' name='id'>
+    {/if}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+    </div>
+</form>
+
+{block name='script'}
+<script>
+    layui.form.render();
+</script>
+{/block}

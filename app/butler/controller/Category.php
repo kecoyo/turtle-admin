@@ -4,7 +4,7 @@ namespace app\butler\controller;
 
 use app\butler\model\ButlerCategory;
 use app\butler\model\ButlerIcon;
-use app\data\service\UserAdminService;
+use app\data\service\UserService;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 use think\facade\Config;
@@ -30,7 +30,8 @@ class Category extends Controller
             $this->title = '账号分类管理';
             $this->user_id = input('user_id', '1');
         }, function (QueryHelper $query) {
-            $query->where(['deleted' => 0, 'user_id' => input('user_id', '1')]);
+            $user_id = input('user_id', '1');
+            $query->where(['deleted' => 0, 'user_id' => $user_id]);
             $query->like('name,remark')->equal('status')->dateBetween('create_at')->order('sort asc,id desc');
         });
     }
@@ -41,7 +42,7 @@ class Category extends Controller
      */
     protected function _index_page_filter(array &$data)
     {
-        UserAdminService::buildByUid($data);
+        UserService::buildByUid($data);
     }
 
     /**
@@ -70,12 +71,12 @@ class Category extends Controller
     {
         if ($this->request->isGet()) {
             $data['user_id'] = input('user_id', '1');
-            // if (!isset($data['id'])) {
-            //     $iconInfo = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('sort desc,id desc')->find();
-            //     if (!empty($iconInfo)) {
-            //         $data['icon'] = $iconInfo['url'];
-            //     }
-            // }
+            if (!isset($data['id'])) {
+                $butler_icon = ButlerIcon::mk()->where(['deleted' => 0, 'status' => 1])->order('id asc')->find();
+                if (!empty($butler_icon)) {
+                    $data['icon'] = $butler_icon['url'];
+                }
+            }
         } else {
             $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
         }
