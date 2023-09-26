@@ -1,0 +1,98 @@
+{include file='user/formstyle'}
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="DataTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">用户账号</b></legend>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs2 text-center padding-top-15">
+                    <input type="hidden" data-cut-width="500" data-cut-height="500" data-max-width="500" data-max-height="500"
+                        data-tags="user_avatar" name="avatar" value="{:config(\'app.upload_base_url\')}{$vo.avatar|default=''}">
+                    <script>$('[name=avatar]').uploadOneImage();</script>
+                </div>
+                <div class="layui-col-xs5">
+                    <label class="block relative">
+                        <span class="help-label"><b>登录账号</b></span>
+                        {if isset($vo) and isset($vo.username)}
+                        <input disabled value='{$vo.username|default=""}' required class="layui-input think-bg-gray">
+                        {else}
+                        <input name="username" value='{$vo.username|default=""}' required pattern="^.{4,}$" vali-name="登录账号" placeholder="请输入登录账号" class="layui-input">
+                        {/if}
+                        <span class="help-block">登录账号不能少于4位字符，创建后不能再次修改.</span>
+                    </label>
+                </div>
+                <div class="layui-col-xs5">
+                    <label class="block relative">
+                        <span class="help-label"><b>用户名称</b></span>
+                        <input name="name" value='{$vo.name|default=""}' required vali-name="用户名称" placeholder="请输入用户名称" class="layui-input">
+                        <span class="help-block">用于区分用户数据的用户名称，请尽量不要重复.</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">用户资料</b></legend>
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-xs4">
+                    <label class="relative block">
+                        <p class="help-label"><b>性别</b></p>
+                        <div class="layui-input-inline">
+                            <select class="layui-select" name="gender">
+                                <option value=''>请选择性别</option>
+                                {foreach ['1'=>'男','2'=>'女'] as $k=>$v}
+                                {if isset($vo.gender) and $vo.gender eq $k.""}
+                                <option selected value="{$k}">{$v}</option>
+                                {else}
+                                <option value="{$k}">{$v}</option>
+                                {/if}{/foreach}
+                            </select>
+                        </div>
+                        <p class="help-block">可选，请填写用户性别</p>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="relative block">
+                        <p class="help-label"><b>生日</b></p>
+                        <div class="layui-input-inline">
+                            <input data-date-input name="birthday"  placeholder="请选择生日日期" class="layui-input">
+                        </div>
+                        <p class="help-block">可选，请填写用户生日</p>
+                    </label>
+                </div>
+                <div class="layui-col-xs4">
+                    <label class="relative block">
+                        <span class="help-label"><b>邮箱</b></span>
+                        <input name="email" value='{$vo.email|default=""}' pattern="email" vali-name="联系邮箱" placeholder="请输入联系电子邮箱" class="layui-input">
+                        <span class="color-desc">可选，请填写用户常用的电子邮箱</span>
+                    </label>
+                </div>
+            </div>
+
+            <label class="layui-form-item block relative margin-top-10">
+                <span class="help-label"><b>用户描述</b></span>
+                <textarea placeholder="请输入用户描述" class="layui-textarea" name="describe">{$vo.describe|default=""}</textarea>
+            </label>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    {if empty($vo.id)}
+    {else}
+    <input type='hidden' value='{$vo.id}' name='id'>
+    {/if}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-close>取消编辑</button>
+    </div>
+</form>
+
+{block name='script'}
+<script>
+    layui.form.render();
+</script>
+{/block}
