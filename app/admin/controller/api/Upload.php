@@ -74,7 +74,7 @@ class Upload extends Controller
             }); else {
                 $query->where($unid ? ['unid' => $unid] : ['uuid' => $uuid]);
             }
-            $query->where(['app_id' => input('appid', 0), 'status' => 2, 'issafe' => 0])->in('xext#type');
+            $query->where(['app_id' => input('appid', 0), 'tags' => input('tags', ''), 'status' => 2, 'issafe' => 0])->in('xext#type');
             $query->like('name,hash')->dateBetween('create_at')->order('id desc');
         });
     }

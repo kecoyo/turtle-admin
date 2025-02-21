@@ -265,7 +265,7 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
         function SetFileXdata(file, xmd5, slice) {
             file.xmd5 = xmd5, file.xstate = 0, file.xstats = '';
             file.xkey = file.xmd5 + '.' + file.xext;
-            file.xkey = 'upload/' + file.appid + '/' + file.xkey;
+            file.xkey = 'upload/' + file.appid + '/' + file.tags + '/' + file.xkey;
             return defer.resolve(file, file.xmd5, file.xkey), file;
         }
 

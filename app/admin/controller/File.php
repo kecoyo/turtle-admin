@@ -59,7 +59,7 @@ class File extends Controller
             $this->xexts = SystemFile::mk()->distinct()->column('xext');
         }, function (QueryHelper $query) {
             $query->like('name,hash,xext')->equal('type,app_id,tags')->dateBetween('create_at');
-            $query->where(['issafe' => 0, 'status' => 2, 'uuid' => AdminService::getUserId()]);
+            $query->where(['issafe' => 0, 'status' => 2]);
         });
     }
 
