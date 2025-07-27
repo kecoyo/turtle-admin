@@ -47,5 +47,13 @@ return [
             // 序列化机制
             'serialize'  => [],
         ],
+        'redis' => [
+            // 驱动方式
+            'type'     => 'redis',
+            'host'     => env('CACHE_REDIS_HOST', '127.0.0.1'),
+            'port'     => env('CACHE_REDIS_PORT', 6379),
+            'select'   => env('CACHE_REDIS_SELECT', 0),
+            'password' => env('CACHE_REDIS_PASSWORD', ''),
+        ]
     ],
 ];
