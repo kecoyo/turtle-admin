@@ -91,6 +91,7 @@ class Config extends Controller
                 trace_file($exception);
             }
             // 数据数据到系统配置表
+            $post['site_icon'] = remove_res_url($post['site_icon'] ?? '');
             foreach ($post as $k => $v) sysconf($k, $v);
             sysoplog('系统配置管理', "修改系统参数成功");
             $this->success('修改系统参数成功！', admuri('admin/config/index'));
