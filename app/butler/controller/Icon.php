@@ -91,7 +91,7 @@ class Icon extends Controller
             foreach ($urls as $url) {
                 $result = data_save('ButlerIcon', [
                     'type_id'   => $data['type_id'],
-                    'url'       => str_replace(Config::get('app.upload_base_url'), '', $url),
+                    'url'       => remove_res_url($url),
                 ]);
                 if ($result === false) break;
             }

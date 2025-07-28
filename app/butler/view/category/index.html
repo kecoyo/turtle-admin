@@ -37,7 +37,7 @@
                 {
                     field: 'icon', title: '分类图标', width: 100, align: 'center', templet: function (d) {
                         if (!d.icon) return '-';
-                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:config(\'app.upload_base_url\')}{{d.icon}}"></div>').render(d);
+                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:res_url()}{{d.icon}}"></div>').render(d);
                     }
                 },
                 {field: 'name', title: '分类名称', align: 'center', minWidth: 140},

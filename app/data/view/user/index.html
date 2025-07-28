@@ -36,7 +36,7 @@
                 {field: 'id', title: 'ID', align: 'center',width: 80, sort: true},
                 {field: 'avatar', title: '头像', width: 80, align: 'center', templet: function (d) {
                     if (!d.avatar) return '-';
-                    return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:config(\'app.upload_base_url\')}{{d.avatar}}"></div>').render(d);
+                    return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:res_url()}{{d.avatar}}"></div>').render(d);
                 }},
                 {field: 'username', title: '用户名', align: 'center', templet: '<div>{{d.username||"-"}}</div>'},
                 {field: 'name', title: '姓名', align: 'center'},

@@ -27,6 +27,7 @@
         <li data-open="{:url('index')}?type={$k}">{$v}</li>
         {/if}{/foreach}
     </ul>
+    {:res_url()}
     <div class="layui-tab-content">
         {include file='user/index_search'}
         <table id="UserTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
@@ -44,7 +45,7 @@
                 {
                     field: 'headimg', title: '头像', width: 60, align: 'center', templet: function (d) {
                         if (!d.headimg) return '-';
-                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:config(\'app.upload_base_url\')}{{d.headimg}}"></div>').render(d);
+                        return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:res_url()}{{d.headimg}}"></div>').render(d);
                     }
                 },
                 {field: 'username', title: '登录账号', minWidth: 100, align: 'center', templet: '<div>{{d.username||"-"}}</div>'},

@@ -120,7 +120,7 @@ class User extends Controller
         if ($this->request->isPost()) {
             // 账号权限绑定处理
             $data['authorize'] = arr2str($data['authorize'] ?? []);
-            $data['headimg'] = str_replace(Config::get('app.upload_base_url'), '', $data['headimg']);
+            $data['headimg'] = remove_res_url($data['headimg']);
             if (isset($data['id']) && $data['id'] > 0) {
                 unset($data['username']);
             } else {

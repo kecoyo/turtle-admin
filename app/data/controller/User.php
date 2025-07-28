@@ -64,7 +64,7 @@ class User extends Controller
             //     }
             // }
         } else {
-            $data['avatar'] = str_replace(Config::get('app.upload_base_url'), '', $data['avatar']);
+            $data['avatar'] = remove_res_url($data['avatar']);
             $data['birthday'] = $data['birthday'] != '' ? $data['birthday'] : null;
         }
     }

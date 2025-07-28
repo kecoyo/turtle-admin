@@ -103,20 +103,20 @@ class Account extends Controller
                 if (isset($data['pictures'])) {
                     $urls = [];
                     foreach ($data['pictures'] as $picture) {
-                        $urls[] = Config::get('app.upload_base_url').$picture['url'];
+                        $urls[] = res_url() . $picture['url'];
                     }
                     $data['pictures_str'] = implode("|", $urls);
                 }
             }
         } else {
-            $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
+            $data['icon'] = remove_res_url($data['icon']);
 
             // 数据转换
             if ($data['pictures']) {
                 $pictures = [];
                 $urls = explode("|", $data['pictures']);
                 foreach ($urls as $url) {
-                    $pictures[] = ['url' => str_replace(Config::get('app.upload_base_url'), '', $url)];
+                    $pictures[] = ['url' => remove_res_url($url)];
                 }
                 $data['pictures'] = json_encode($pictures, JSON_UNESCAPED_SLASHES);
             }

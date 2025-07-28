@@ -78,7 +78,7 @@ class Category extends Controller
                 }
             }
         } else {
-            $data['icon'] = str_replace(Config::get('app.upload_base_url'), '', $data['icon']);
+            $data['icon'] = remove_res_url($data['icon']);
         }
     }
 
