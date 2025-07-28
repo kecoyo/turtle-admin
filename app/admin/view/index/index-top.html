@@ -7,7 +7,7 @@
         </li>
         <li class="layui-nav-item" lay-unselect>
             <a class="layui-logo-hide layui-elip" href="{:sysuri('@')}" title="{:sysconf('app_name')}">
-                <span class="headimg headimg-no headimg-xs" data-lazy-src="{:sysconf('site_icon')}"></span>
+                <span class="headimg headimg-no headimg-xs" data-lazy-src="{:res_url()}{:sysconf('site_icon')}"></span>
             </a>
         </li>
         {foreach $menus as $one}
@@ -31,7 +31,7 @@
                 <dd lay-unselect><a data-load="{:sysuri('admin/login/out')}" data-confirm="确定要退出登录吗？"><i class="layui-icon layui-icon-release"></i> 退出登录</a></dd>
             </dl>
             <a class="layui-elip">
-                <span class="headimg" data-lazy-src="{:htmlentities(session('user.headimg'))}"></span>
+                <span class="headimg" data-lazy-src="{:res_url()}{:htmlentities(session('user.headimg'))}"></span>
                 <span>{:htmlentities(session('user.nickname')?:session('user.username'))}</span>
             </a>
         </li>

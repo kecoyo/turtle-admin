@@ -27,7 +27,6 @@
         <li data-open="{:url('index')}?type={$k}">{$v}</li>
         {/if}{/foreach}
     </ul>
-    {:res_url()}
     <div class="layui-tab-content">
         {include file='user/index_search'}
         <table id="UserTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>

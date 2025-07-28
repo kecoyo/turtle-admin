@@ -14,3 +14,9 @@
 /* | 自定义后台扩展样式，需要在加载 console.css 后载入
 /* | 使用 composer require zoujingli/think-plugs-static 时不会更新此文件
 /* +---------------------------------------------------------------------- */
+
+.layui-table .headimg-xs {
+    width: 30px;
+    height: 30px;
+    top: -2px;
+}
