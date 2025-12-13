@@ -14,16 +14,16 @@
 // | github 代码仓库：https://github.com/zoujingli/ThinkAdmin
 // +----------------------------------------------------------------------
 
-namespace app\data\service;
+namespace app\butler\service;
 
-use app\data\model\DataUser;
+use app\butler\model\ButlerUser;
 use think\admin\Exception;
 use think\admin\Service;
 
 /**
  * 用户数据服务
  * Class UserService
- * @package app\data\service
+ * @package app\butler\service
  */
 class UserService extends Service
 {
@@ -38,7 +38,7 @@ class UserService extends Service
     {
         if (!empty($unionid)) {
             [$map1, $map2] = [[['unionid', '=', $unionid]], [[$field, '=', $openid]]];
-            if ($uuid = DataUser::mk()->whereOr([$map1, $map2])->value('id')) {
+            if ($uuid = ButlerUser::mk()->whereOr([$map1, $map2])->value('id')) {
                 return ['id' => $uuid];
             }
         }
@@ -57,7 +57,7 @@ class UserService extends Service
     {
         if (count($list) < 1) return $list;
         $uids = array_unique(array_column($list, $keys));
-        $users = DataUser::mk()->whereIn('id', $uids)->column($cols, 'id');
+        $users = ButlerUser::mk()->whereIn('id', $uids)->column($cols, 'id');
         foreach ($list as &$vo) $vo[$bind] = $users[$vo[$keys]] ?? [];
         return $list;
     }

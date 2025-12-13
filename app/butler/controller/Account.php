@@ -5,7 +5,7 @@ namespace app\butler\controller;
 use app\butler\model\ButlerAccount;
 use app\butler\model\ButlerCategory;
 use app\butler\model\ButlerIcon;
-use app\data\service\UserService;
+use app\butler\service\UserService;
 use think\admin\Controller;
 use think\admin\extend\DataExtend;
 use think\admin\helper\QueryHelper;

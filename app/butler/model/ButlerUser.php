@@ -1,15 +1,15 @@
 <?php
 
-namespace app\data\model;
+namespace app\butler\model;
 
 use think\admin\Model;
 
 /**
  * 用户模型
- * Class DataUser
- * @package app\data\model
+ * Class ButlerUser
+ * @package app\butler\model
  */
-class DataUser extends Model
+class ButlerUser extends Model
 {
 
     /**

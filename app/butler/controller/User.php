@@ -1,8 +1,8 @@
 <?php
 
-namespace app\data\controller;
+namespace app\butler\controller;
 
-use app\data\model\DataUser;
+use app\butler\model\ButlerUser;
 use think\admin\Controller;
 use think\admin\helper\QueryHelper;
 use think\facade\Config;
@@ -10,7 +10,7 @@ use think\facade\Config;
 /**
  * 用户管理
  * Class User
- * @package app\data\controller
+ * @package app\butler\controller
  */
 class User extends Controller
 {
@@ -24,7 +24,7 @@ class User extends Controller
      */
     public function index()
     {
-        DataUser::mQuery()->layTable(function () {
+        ButlerUser::mQuery()->layTable(function () {
             $this->title = '用户管理';
         }, function (QueryHelper $query) {
             $query->where(['deleted' => 0]);
@@ -38,7 +38,7 @@ class User extends Controller
      */
     public function add()
     {
-        DataUser::mForm('form');
+        ButlerUser::mForm('form');
     }
 
     /**
@@ -47,7 +47,7 @@ class User extends Controller
      */
     public function edit()
     {
-        DataUser::mForm('form');
+        ButlerUser::mForm('form');
     }
 
     /**
@@ -75,7 +75,7 @@ class User extends Controller
      */
     public function state()
     {
-        DataUser::mSave($this->_vali([
+        ButlerUser::mSave($this->_vali([
             'status.in:0,1'  => '状态值范围异常！',
             'status.require' => '状态值不能为空！',
         ]));
@@ -87,6 +87,6 @@ class User extends Controller
      */
     public function remove()
     {
-        DataUser::mDelete();
+        ButlerUser::mDelete();
     }
 }
