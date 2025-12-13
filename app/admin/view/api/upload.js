@@ -11,7 +11,6 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
             this.option.safe = this.option.elem.data('safe') ? 1 : 0;
             this.option.hide = this.option.elem.data('hload') ? 1 : 0;
             this.option.mult = this.option.elem.data('multiple') > 0;
-            this.option.appid = this.option.elem.data('appid') || '0';
             this.option.tags = this.option.elem.data('tags') || '';
             this.option.type = this.option.safe ? 'local' : this.option.elem.attr('data-uptype') || '';
             this.option.quality = parseFloat(this.option.elem.data('quality') || '1.0');
@@ -37,7 +36,6 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
                     obj.items = [], obj.files = obj.pushFile();
                     layui.each(obj.files, function (idx, file) {
                         obj.items.push(file);
-                        file.appid = that.option.appid;
                         file.tags = that.option.tags;
                         file.quality = that.option.quality;
                         file.maxWidth = that.option.maxWidth;
@@ -89,7 +87,7 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
                 require(['compressor'], function (Compressor) {
                     new Compressor(file, {
                         quality: file.quality, resize: 'cover', width: file.cutWidth || 0, height: file.cutHeight || 0, maxWidth: file.maxWidth, maxHeight: file.maxHeight, success(blob) {
-                            blob.index = file.index, blob.notify = file.notify, blob.appid = file.appid, blob.tags = file.tags, files[index] = blob;
+                            blob.index = file.index, blob.notify = file.notify, blob.tags = file.tags, files[index] = blob;
                             that.hash(files[index]).then(function (file) {
                                 that.event('upload.hash', file).request(file, done);
                             });
@@ -109,7 +107,7 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
     // 文件上传
     Adapter.prototype.request = function (file, done) {
         var that = this, data = {key: file.xkey, safe: that.option.safe, uptype: that.option.type};
-        data.size = file.size, data.name = file.name, data.hash = file.xmd5, data.mime = file.type, data.xext = file.xext, data.appid = file.appid, data.tags = file.tags;
+        data.size = file.size, data.name = file.name, data.hash = file.xmd5, data.mime = file.type, data.xext = file.xext, data.tags = file.tags;
         jQuery.ajax("{:url('admin/api.upload/state',[],false,true)}", {
             data: data, method: 'post', success: function (ret) {
                 file.id = ret.data.id || 0, file.xurl = ret.data.url;
@@ -265,7 +263,7 @@ define(['md5', 'notify'], function (SparkMD5, Notify, allowMime) {
         function SetFileXdata(file, xmd5, slice) {
             file.xmd5 = xmd5, file.xstate = 0, file.xstats = '';
             file.xkey = file.xmd5 + '.' + file.xext;
-            file.xkey = 'upload/' + file.appid + '/' + file.tags + '/' + file.xkey;
+            file.xkey = 'upload/' + file.tags + '/' + file.xkey;
             return defer.resolve(file, file.xmd5, file.xkey), file;
         }
 

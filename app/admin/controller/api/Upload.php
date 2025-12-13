@@ -74,7 +74,7 @@ class Upload extends Controller
             }); else {
                 $query->where($unid ? ['unid' => $unid] : ['uuid' => $uuid]);
             }
-            $query->where(['app_id' => input('appid', 0), 'tags' => input('tags', ''), 'status' => 2, 'issafe' => 0])->in('xext#type');
+            $query->where(['tags' => input('tags', ''), 'status' => 2, 'issafe' => 0])->in('xext#type');
             $query->like('name,hash')->dateBetween('create_at')->order('id desc');
         });
     }
@@ -89,7 +89,6 @@ class Upload extends Controller
             [$name, $safe] = [input('name'), $this->getSafe()];
             $data = ['uptype' => $this->getType(), 'safe' => intval($safe), 'key' => input('key')];
             $file = SystemFile::mk()->data($this->_vali([
-                'app_id.value' => input('appid', 0),
                 'tags.value' => input('tags', ''),
                 'xkey.value'   => $data['key'],
                 'type.value'   => $this->getType(),
@@ -106,7 +105,7 @@ class Upload extends Controller
             if (empty($mime)) $file->setAttr('mime', Storage::mime($file->getAttr('xext')));
             $info = Storage::instance($data['uptype'])->info($data['key'], $safe, $name);
             if (isset($info['url']) && isset($info['key'])) {
-                $find = SystemFile::mk()->where(['app_id' => $file->app_id, 'hash' => $file->hash])->find();
+                $find = SystemFile::mk()->where(['hash' => $file->hash])->find();
                 if (empty($find)) {
                     $file->save(['xurl' => $info['url'], 'isfast' => 1, 'issafe' => $data['safe']]);
                 }
