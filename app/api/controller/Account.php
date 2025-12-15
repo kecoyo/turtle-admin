@@ -78,8 +78,19 @@ class Account extends Base
                 ->select()
                 ->toArray();
 
-            // 处理图片URL
+            // 处理图片URL和属性
             foreach ($accounts as &$account) {
+                // 解析properties
+                if (!empty($account['properties'])) {
+                    $properties = is_string($account['properties']) 
+                        ? json_decode($account['properties'], true) 
+                        : $account['properties'];
+                    $account['properties'] = is_array($properties) ? $properties : [];
+                } else {
+                    $account['properties'] = [];
+                }
+                
+                // 解析pictures
                 if (!empty($account['pictures'])) {
                     $pictures = is_string($account['pictures']) 
                         ? json_decode($account['pictures'], true) 
@@ -91,8 +102,13 @@ class Account extends Base
                             }
                         }
                         $account['pictures'] = $pictures;
+                    } else {
+                        $account['pictures'] = [];
                     }
+                } else {
+                    $account['pictures'] = [];
                 }
+                
                 if (!empty($account['icon'])) {
                     $account['icon'] = res_url() . $account['icon'];
                 }
@@ -131,6 +147,16 @@ class Account extends Base
 
             $accountData = $account->toArray();
 
+            // 解析properties
+            if (!empty($accountData['properties'])) {
+                $properties = is_string($accountData['properties']) 
+                    ? json_decode($accountData['properties'], true) 
+                    : $accountData['properties'];
+                $accountData['properties'] = is_array($properties) ? $properties : [];
+            } else {
+                $accountData['properties'] = [];
+            }
+
             // 处理图片URL
             if (!empty($accountData['pictures'])) {
                 $pictures = is_string($accountData['pictures']) 
@@ -143,8 +169,13 @@ class Account extends Base
                         }
                     }
                     $accountData['pictures'] = $pictures;
+                } else {
+                    $accountData['pictures'] = [];
                 }
+            } else {
+                $accountData['pictures'] = [];
             }
+            
             if (!empty($accountData['icon'])) {
                 $accountData['icon'] = res_url() . $accountData['icon'];
             }

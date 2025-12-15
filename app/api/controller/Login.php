@@ -6,7 +6,7 @@ use think\admin\Controller;
 use think\admin\extend\JwtExtend;
 use think\exception\HttpResponseException;
 
-class Login extends Controller
+class Login extends Base
 {
 
     /**
@@ -21,7 +21,9 @@ class Login extends Controller
                 $this->error('缺少user_id参数');
             }
 
-            $user = ButlerUser::mk()->find($user_id);
+            $user = ButlerUser::mk()
+                ->where(['id' => $user_id])
+                ->find();
             if ($user->isEmpty()) {
                 $this->error('用户不存在');
             }
@@ -38,14 +40,22 @@ class Login extends Controller
 
             $token = JwtExtend::token($payload);
 
-            $this->success('登录成功', [
+            // 获取完整的用户信息（与info接口相同的字段）
+            $user = ButlerUser::mk()
+                ->where(['id' => $user_id])
+                ->field('id,nickname,avatar,birthday,gender,phone,email,remark,province,city,county,create_at')
+                ->find();
+
+            $userData = $user->toArray();
+
+            // 处理头像URL
+            if (!empty($userData['avatar'])) {
+                $userData['avatar'] = res_url() . $userData['avatar'];
+            }
+
+            $this->success('登录成功', array_merge([
                 'token' => $token,
-                'user' => [
-                    'id' => $user['id'],
-                    'nickname' => $user['nickname'],
-                    'avatar' => $user['avatar'],
-                ]
-            ]);
+            ], $userData));
         } catch (HttpResponseException $e) {
             throw $e;
         } catch (\Exception $e) {
@@ -92,6 +102,12 @@ class Login extends Controller
                 ]);
             }
 
+            // 重新查询用户信息，获取完整字段
+            $user = ButlerUser::mk()
+                ->where(['id' => $user['id']])
+                ->field('id,nickname,avatar,birthday,gender,phone,email,remark,province,city,county,create_at')
+                ->find();
+
             // 生成JWT token
             $payload = [
                 'iss' => 'turtle-admin',
@@ -104,14 +120,16 @@ class Login extends Controller
 
             $token = JwtExtend::token($payload);
 
-            $this->success('登录成功', [
+            $userData = $user->toArray();
+
+            // 处理头像URL
+            if (!empty($userData['avatar'])) {
+                $userData['avatar'] = res_url() . $userData['avatar'];
+            }
+
+            $this->success('登录成功', array_merge([
                 'token' => $token,
-                'user' => [
-                    'id' => $user['id'],
-                    'nickname' => $user['nickname'],
-                    'avatar' => $user['avatar'],
-                ]
-            ]);
+            ], $userData));
         } catch (HttpResponseException $e) {
             throw $e;
         } catch (\Exception $e) {
