@@ -40,10 +40,10 @@ class User extends Base
     }
 
     /**
-     * 更新用户基本信息
+     * 更新用户信息
      * @return void
      */
-    public function updateBaseInfo()
+    public function update()
     {
         $user_id = $this->requireAuth();
 
