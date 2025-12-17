@@ -200,9 +200,6 @@ class Account extends Base
         if (empty($data['name'])) {
             $this->error('账号名称不能为空');
         }
-        if (empty($data['icon'])) {
-            $this->error('账号图标不能为空');
-        }
         if (empty($data['category_id'])) {
             $this->error('分类ID不能为空');
         }
@@ -295,9 +292,6 @@ class Account extends Base
         }
         if (empty($data['name'])) {
             $this->error('账号名称不能为空');
-        }
-        if (empty($data['icon'])) {
-            $this->error('账号图标不能为空');
         }
 
         try {
