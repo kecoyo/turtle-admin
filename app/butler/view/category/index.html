@@ -38,7 +38,7 @@
                 {
                     field: 'user_id', title: '所属用户', minWidth: 110, align: 'center', templet: function (d) {
                         d.user = d.user || {};
-                        return d.user.id ? d.user.name : '-';
+                        return d.user.id ? d.user.nickname : '-';
                     }
                 },
                 {field: 'status', title: '分类状态', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
