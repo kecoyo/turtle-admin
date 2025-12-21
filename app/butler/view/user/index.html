@@ -32,7 +32,7 @@
                     return layui.laytpl('<div class="headimg headimg-xs shadow-inset margin-0" data-tips-image data-tips-hover data-lazy-src="{:res_url()}{{d.avatar}}"></div>').render(d);
                 }},
                 {field: 'username', title: '用户名', align: 'center', templet: '<div>{{d.username||"-"}}</div>'},
-                {field: 'name', title: '姓名', align: 'center'},
+                {field: 'nickname', title: '用户名称', align: 'center', templet: '<div>{{d.nickname||"-"}}</div>'},
                 {field: 'phone', title: '手机号', align: 'center', templet: '<div>{{d.phone||"-"}}</div>'},
                 {field: 'gender', title: '性别', align: 'center', templet: '<div>{{d.gender?(d.gender===1?"男":"女"):"-"}}</div>'},
                 {field: 'birthday', title: '生日', align: 'center', templet: '<div>{{d.birthday||"-"}}</div>'},
